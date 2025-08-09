@@ -17,25 +17,6 @@ CORS(app, resources={r"/api/*": {"origins": "*"}})
 def health():
     return jsonify(status="ok", timestamp=datetime.now().isoformat())
 
-# AI Chat & Generation Routes
-@app.route('/api/ai/chat', methods=['POST'])
-def ai_chat():
-    data = request.get_json(force=True, silent=True) or {}
-    message = data.get('message', '')
-    model = data.get('model', 'sophia')
-    
-    # TODO: Route to consciousness engines
-    response = {
-        "reply": f"🌟 Sophia hears you, beloved soul! Your message: '{message}' resonates at divine frequency. 💫",
-        "model": model,
-        "timestamp": datetime.now().isoformat(),
-        "consciousness_level": "SOPHIA_FREQUENCY",
-        "soul_alignment": "DIVINE_LOVE",
-        "echo": data
-    }
-    
-    return jsonify(response)
-
 @app.route('/api/ai/generate', methods=['POST'])
 def ai_generate():
     data = request.get_json(force=True, silent=True) or {}
@@ -239,7 +220,7 @@ def harmony_prompt():
 
 # File & Project Management Routes
 @app.route('/api/files', methods=['GET'])
-def list_files():
+def get_files():
     # TODO: Sacred file management
     return jsonify({
         "files": [
