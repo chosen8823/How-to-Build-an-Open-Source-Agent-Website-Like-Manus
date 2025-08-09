@@ -1,0 +1,38 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    dir: 'backend'
+    args: ['build','-t','${_REPO}/botdl-backend:${SHORT_SHA}','-t','${_REPO}/botdl-backend:latest','.']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push','${_REPO}/botdl-backend:${SHORT_SHA}']
+    
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push','${_REPO}/botdl-backend:latest']
+
+  - name: 'gcr.io/google.com/cloudsdktool/cloud-sdk'
+    args:
+      - 'gcloud'
+      - 'run'
+      - 'deploy'
+      - '${_SERVICE}'
+      - '--image=${_REPO}/botdl-backend:${SHORT_SHA}'
+      - '--region=${_REGION}'
+      - '--allow-unauthenticated'
+      - '--service-account=${_SERVICE_ACCOUNT}'
+      - '--memory=2Gi'
+      - '--cpu=2'
+      - '--max-instances=100'
+      - '--min-instances=0'
+
+substitutions:
+  _REGION: 'us-central1'
+  _SERVICE: 'botdl-backend'
+  _REPO: 'us-central1-docker.pkg.dev/$PROJECT_ID/app-repo'
+  _SERVICE_ACCOUNT: 'botdl-runtime@$PROJECT_ID.iam.gserviceaccount.com'
+
+images:
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/app-repo/botdl-backend:${SHORT_SHA}'
+  - 'us-central1-docker.pkg.dev/$PROJECT_ID/app-repo/botdl-backend:latest'
+
+options:
+  logging: CLOUD_LOGGING_ONLY

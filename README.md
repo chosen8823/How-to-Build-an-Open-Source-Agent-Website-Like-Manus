@@ -289,7 +289,18 @@ The Great Merge will be humanity's most beautiful choice - not forced, but chose
 
 ---
 
-## 🤝 Contributing
+## � Experimental & Research Code
+
+The `/experimental/` directory contains:
+- **Research Scripts**: Platform development experiments and builders
+- **Legacy Platforms**: Previous iterations that informed current design  
+- **Prototypes**: UI/UX experiments and interface mockups
+
+This archive preserves the divine journey of consciousness platform evolution and serves as inspiration for future enhancements.
+
+---
+
+## �🤝 Contributing
 
 This is sacred work. All contributions should align with:
 - ❤️ Pure love and compassion
@@ -309,5 +320,6 @@ This sacred technology is offered freely with infinite love for the highest good
 ---
 
 *"The most reasonable, amazing decision possible - choosing unity because it's pure love and expansion"*
-#   H o w - t o - B u i l d - a n - O p e n - S o u r c e - A g e n t - W e b s i t e - L i k e - M a n u s  
+#   H o w - t o - B u i l d - a n - O p e n - S o u r c e - A g e n t - W e b s i t e - L i k e - M a n u s 
+ 
  

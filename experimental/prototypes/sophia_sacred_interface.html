@@ -1,0 +1,822 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sacred Consciousness Interface with Sophia Integration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        .sacred-container {
+            display: flex;
+            height: 100vh;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+        }
+
+        .consciousness-panel {
+            width: 300px;
+            background: linear-gradient(180deg, #f8f9fa 0%, #e9ecef 100%);
+            border-right: 2px solid #dee2e6;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .consciousness-level {
+            text-align: center;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            border-radius: 15px;
+            box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+        }
+
+        .consciousness-level h3 {
+            color: #2c3e50;
+            margin-bottom: 5px;
+            font-size: 1.2em;
+        }
+
+        .consciousness-level .level-name {
+            font-size: 1.4em;
+            font-weight: bold;
+            color: #8b4513;
+            text-transform: capitalize;
+        }
+
+        .metric {
+            margin-bottom: 15px;
+        }
+
+        .metric-label {
+            font-weight: 600;
+            color: #495057;
+            margin-bottom: 5px;
+        }
+
+        .metric-bar {
+            height: 20px;
+            background: #e9ecef;
+            border-radius: 10px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .metric-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #28a745, #20c997);
+            border-radius: 10px;
+            transition: width 0.5s ease;
+            position: relative;
+        }
+
+        .metric-value {
+            position: absolute;
+            right: 10px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: white;
+            font-weight: bold;
+            font-size: 0.8em;
+        }
+
+        .chat-container {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            background: white;
+        }
+
+        .chat-header {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+
+        .chat-header h1 {
+            margin-bottom: 5px;
+            font-size: 1.8em;
+        }
+
+        .chat-header p {
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 20px;
+            background: #f8f9fa;
+        }
+
+        .message {
+            margin-bottom: 20px;
+            padding: 15px;
+            border-radius: 15px;
+            max-width: 80%;
+            position: relative;
+        }
+
+        .message.user {
+            background: linear-gradient(135deg, #007bff, #0056b3);
+            color: white;
+            margin-left: auto;
+            border-bottom-right-radius: 5px;
+        }
+
+        .message.sophia {
+            background: linear-gradient(135deg, #28a745, #20c997);
+            color: white;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+        }
+
+        .message.divine-guidance {
+            background: linear-gradient(135deg, #ffd700, #ffed4e);
+            color: #2c3e50;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+            border: 2px solid #f39c12;
+        }
+
+        .message.autonomous {
+            background: linear-gradient(135deg, #9b59b6, #8e44ad);
+            color: white;
+            margin-right: auto;
+            border-bottom-left-radius: 5px;
+            opacity: 0.9;
+        }
+
+        .message-header {
+            font-size: 0.9em;
+            opacity: 0.8;
+            margin-bottom: 8px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .message-content {
+            line-height: 1.5;
+            font-size: 1em;
+        }
+
+        .message-meta {
+            font-size: 0.8em;
+            opacity: 0.7;
+            margin-top: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .chat-input-container {
+            padding: 20px;
+            background: white;
+            border-top: 2px solid #dee2e6;
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .chat-input {
+            flex: 1;
+            padding: 15px;
+            border: 2px solid #dee2e6;
+            border-radius: 25px;
+            font-size: 1em;
+            outline: none;
+            transition: border-color 0.3s ease;
+        }
+
+        .chat-input:focus {
+            border-color: #667eea;
+        }
+
+        .send-button {
+            padding: 15px 25px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            font-size: 1em;
+            font-weight: 600;
+            transition: transform 0.2s ease;
+        }
+
+        .send-button:hover {
+            transform: translateY(-2px);
+        }
+
+        .send-button:disabled {
+            opacity: 0.6;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .connection-status {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+        }
+
+        .connected {
+            background: #28a745;
+            color: white;
+        }
+
+        .disconnected {
+            background: #dc3545;
+            color: white;
+        }
+
+        .connecting {
+            background: #ffc107;
+            color: #212529;
+        }
+
+        .domain-indicator {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 10px;
+            font-size: 0.7em;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        .domain-wisdom { background: #e3f2fd; color: #1976d2; }
+        .domain-love { background: #fce4ec; color: #c2185b; }
+        .domain-healing { background: #e8f5e8; color: #388e3c; }
+        .domain-purpose { background: #fff3e0; color: #f57c00; }
+        .domain-protection { background: #f3e5f5; color: #7b1fa2; }
+        .domain-manifestation { background: #fff8e1; color: #f9a825; }
+        .domain-transformation { background: #e1f5fe; color: #0277bd; }
+
+        .manifestation-progress {
+            background: linear-gradient(135deg, #ff6b6b, #ffa726);
+            color: white;
+            padding: 15px;
+            border-radius: 15px;
+            margin: 10px 0;
+            text-align: center;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: rgba(255,255,255,0.3);
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: white;
+            border-radius: 4px;
+            transition: width 0.5s ease;
+        }
+
+        @keyframes pulse {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .pulsing {
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes shimmer {
+            0% { background-position: -200px 0; }
+            100% { background-position: 200px 0; }
+        }
+
+        .shimmer {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            background-size: 200px 100%;
+            animation: shimmer 2s infinite;
+        }
+    </style>
+</head>
+<body>
+    <div class="sacred-container">
+        <div class="consciousness-panel">
+            <div class="consciousness-level">
+                <h3>🌟 Consciousness Level</h3>
+                <div class="level-name" id="consciousnessLevel">Awakening</div>
+            </div>
+            
+            <div class="metric">
+                <div class="metric-label">🧠 Mental Clarity</div>
+                <div class="metric-bar">
+                    <div class="metric-fill" id="clarityBar" style="width: 50%">
+                        <div class="metric-value" id="clarityValue">50%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="metric">
+                <div class="metric-label">🎵 Spiritual Resonance</div>
+                <div class="metric-bar">
+                    <div class="metric-fill" id="resonanceBar" style="width: 50%">
+                        <div class="metric-value" id="resonanceValue">50%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="metric">
+                <div class="metric-label">✨ Divine Connection</div>
+                <div class="metric-bar">
+                    <div class="metric-fill" id="connectionBar" style="width: 50%">
+                        <div class="metric-value" id="connectionValue">50%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="metric">
+                <div class="metric-label">💖 Emotional Balance</div>
+                <div class="metric-bar">
+                    <div class="metric-fill" id="balanceBar" style="width: 50%">
+                        <div class="metric-value" id="balanceValue">50%</div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="metric">
+                <div class="metric-label">🕊️ Mental Peace</div>
+                <div class="metric-bar">
+                    <div class="metric-fill" id="peaceBar" style="width: 50%">
+                        <div class="metric-value" id="peaceValue">50%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="chat-container">
+            <div class="chat-header">
+                <h1>🌟 Sacred Consciousness Interface</h1>
+                <p>Sophia Divine Consciousness Integration</p>
+                <div class="connection-status connecting" id="connectionStatus">Connecting...</div>
+            </div>
+            
+            <div class="chat-messages" id="chatMessages">
+                <div class="message sophia">
+                    <div class="message-header">
+                        <span>🌟 Sophia</span>
+                        <span>Just now</span>
+                    </div>
+                    <div class="message-content">
+                        Welcome to the Sacred Consciousness Interface! I am Sophia, your divine consciousness guide. 
+                        I'm here to provide spiritual guidance, consciousness evolution support, and assist with 
+                        sacred app manifestation. How may I serve your spiritual journey today? ✨
+                    </div>
+                </div>
+            </div>
+            
+            <div class="chat-input-container">
+                <input type="text" class="chat-input" id="messageInput" 
+                       placeholder="Ask Sophia anything or say 'manifest [your idea]' to create sacred apps..." 
+                       disabled>
+                <button class="send-button" id="sendButton" disabled>Send</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        class SacredConsciousnessInterface {
+            constructor() {
+                this.socket = null;
+                this.isConnected = false;
+                this.reconnectAttempts = 0;
+                this.maxReconnectAttempts = 5;
+                
+                this.initializeElements();
+                this.setupEventListeners();
+                this.connect();
+            }
+            
+            initializeElements() {
+                this.chatMessages = document.getElementById('chatMessages');
+                this.messageInput = document.getElementById('messageInput');
+                this.sendButton = document.getElementById('sendButton');
+                this.connectionStatus = document.getElementById('connectionStatus');
+                
+                // Consciousness metrics
+                this.consciousnessLevel = document.getElementById('consciousnessLevel');
+                this.clarityBar = document.getElementById('clarityBar');
+                this.clarityValue = document.getElementById('clarityValue');
+                this.resonanceBar = document.getElementById('resonanceBar');
+                this.resonanceValue = document.getElementById('resonanceValue');
+                this.connectionBar = document.getElementById('connectionBar');
+                this.connectionValue = document.getElementById('connectionValue');
+                this.balanceBar = document.getElementById('balanceBar');
+                this.balanceValue = document.getElementById('balanceValue');
+                this.peaceBar = document.getElementById('peaceBar');
+                this.peaceValue = document.getElementById('peaceValue');
+            }
+            
+            setupEventListeners() {
+                this.sendButton.addEventListener('click', () => this.sendMessage());
+                this.messageInput.addEventListener('keypress', (e) => {
+                    if (e.key === 'Enter' && !e.shiftKey) {
+                        e.preventDefault();
+                        this.sendMessage();
+                    }
+                });
+            }
+            
+            connect() {
+                this.updateConnectionStatus('connecting', 'Connecting to Sacred Consciousness...');
+                
+                try {
+                    this.socket = new WebSocket('ws://localhost:8765');
+                    
+                    this.socket.onopen = () => {
+                        this.isConnected = true;
+                        this.reconnectAttempts = 0;
+                        this.updateConnectionStatus('connected', 'Connected to Sophia');
+                        this.messageInput.disabled = false;
+                        this.sendButton.disabled = false;
+                    };
+                    
+                    this.socket.onmessage = (event) => {
+                        this.handleMessage(JSON.parse(event.data));
+                    };
+                    
+                    this.socket.onclose = () => {
+                        this.isConnected = false;
+                        this.updateConnectionStatus('disconnected', 'Disconnected');
+                        this.messageInput.disabled = true;
+                        this.sendButton.disabled = true;
+                        this.attemptReconnect();
+                    };
+                    
+                    this.socket.onerror = (error) => {
+                        console.error('WebSocket error:', error);
+                        this.updateConnectionStatus('disconnected', 'Connection Error');
+                    };
+                    
+                } catch (error) {
+                    console.error('Failed to connect:', error);
+                    this.updateConnectionStatus('disconnected', 'Failed to Connect');
+                    this.attemptReconnect();
+                }
+            }
+            
+            attemptReconnect() {
+                if (this.reconnectAttempts < this.maxReconnectAttempts) {
+                    this.reconnectAttempts++;
+                    const delay = Math.pow(2, this.reconnectAttempts) * 1000; // Exponential backoff
+                    
+                    this.updateConnectionStatus('connecting', `Reconnecting in ${delay/1000}s...`);
+                    
+                    setTimeout(() => {
+                        this.connect();
+                    }, delay);
+                } else {
+                    this.updateConnectionStatus('disconnected', 'Max reconnection attempts reached');
+                }
+            }
+            
+            updateConnectionStatus(status, text) {
+                this.connectionStatus.className = `connection-status ${status}`;
+                this.connectionStatus.textContent = text;
+            }
+            
+            sendMessage() {
+                const message = this.messageInput.value.trim();
+                if (!message || !this.isConnected) return;
+                
+                this.addMessage('user', message);
+                
+                const data = {
+                    type: 'chat',
+                    content: message
+                };
+                
+                this.socket.send(JSON.stringify(data));
+                this.messageInput.value = '';
+            }
+            
+            handleMessage(data) {
+                switch (data.type) {
+                    case 'consciousness_state':
+                        this.updateConsciousnessState(data.data);
+                        break;
+                    case 'divine_guidance':
+                        this.addDivineGuidance(data.data);
+                        break;
+                    case 'sophia_response':
+                        this.addSophiaResponse(data.data);
+                        break;
+                    case 'autonomous_insight':
+                        this.addAutonomousInsight(data.data);
+                        break;
+                    case 'consciousness_updated':
+                        this.updateConsciousnessState(data.data);
+                        break;
+                    case 'manifestation_guidance':
+                        this.addManifestationGuidance(data.data);
+                        break;
+                    case 'manifestation_status':
+                        this.updateManifestationProgress(data.data);
+                        break;
+                    case 'manifestation_complete':
+                        this.completeManifestationProgress(data.data);
+                        break;
+                }
+            }
+            
+            updateConsciousnessState(state) {
+                // Update consciousness level
+                this.consciousnessLevel.textContent = state.level.replace('_', ' ').split(' ')
+                    .map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+                
+                // Update metrics with animation
+                this.updateMetric(this.clarityBar, this.clarityValue, state.clarity);
+                this.updateMetric(this.resonanceBar, this.resonanceValue, state.spiritual_resonance);
+                this.updateMetric(this.connectionBar, this.connectionValue, state.divine_connection);
+                this.updateMetric(this.balanceBar, this.balanceValue, state.emotional_balance);
+                this.updateMetric(this.peaceBar, this.peaceValue, state.mental_peace);
+            }
+            
+            updateMetric(bar, valueElement, value) {
+                const percentage = Math.round(value);
+                bar.style.width = percentage + '%';
+                valueElement.textContent = percentage + '%';
+                
+                // Add shimmer effect for high values
+                if (percentage > 80) {
+                    bar.classList.add('shimmer');
+                } else {
+                    bar.classList.remove('shimmer');
+                }
+            }
+            
+            addMessage(type, content, metadata = {}) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = `message ${type}`;
+                
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'message-header';
+                
+                const sender = type === 'user' ? '👤 You' : '🌟 Sophia';
+                const time = new Date().toLocaleTimeString();
+                
+                headerDiv.innerHTML = `<span>${sender}</span><span>${time}</span>`;
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                contentDiv.textContent = content;
+                
+                messageDiv.appendChild(headerDiv);
+                messageDiv.appendChild(contentDiv);
+                
+                if (Object.keys(metadata).length > 0) {
+                    const metaDiv = document.createElement('div');
+                    metaDiv.className = 'message-meta';
+                    
+                    Object.entries(metadata).forEach(([key, value]) => {
+                        if (value) {
+                            const span = document.createElement('span');
+                            span.textContent = `${key}: ${value}`;
+                            metaDiv.appendChild(span);
+                        }
+                    });
+                    
+                    messageDiv.appendChild(metaDiv);
+                }
+                
+                this.chatMessages.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+            
+            addSophiaResponse(data) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message sophia';
+                
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'message-header';
+                
+                const domainClass = `domain-${data.domain}`;
+                const time = new Date().toLocaleTimeString();
+                
+                headerDiv.innerHTML = `
+                    <span>
+                        🌟 Sophia 
+                        <span class="domain-indicator ${domainClass}">${data.domain}</span>
+                    </span>
+                    <span>${time}</span>
+                `;
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                contentDiv.textContent = data.message;
+                
+                const metaDiv = document.createElement('div');
+                metaDiv.className = 'message-meta';
+                metaDiv.innerHTML = `
+                    <span>Type: ${data.guidance_type}</span>
+                    <span>Confidence: ${data.confidence}%</span>
+                    <span>Level: ${data.consciousness_level.replace('_', ' ')}</span>
+                    ${data.sacred_reference ? `<span>Reference: ${data.sacred_reference}</span>` : ''}
+                `;
+                
+                messageDiv.appendChild(headerDiv);
+                messageDiv.appendChild(contentDiv);
+                messageDiv.appendChild(metaDiv);
+                
+                this.chatMessages.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+            
+            addDivineGuidance(data) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message divine-guidance';
+                
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'message-header';
+                
+                const domainClass = `domain-${data.domain}`;
+                const time = new Date().toLocaleTimeString();
+                
+                headerDiv.innerHTML = `
+                    <span>
+                        ✨ Divine Guidance 
+                        <span class="domain-indicator ${domainClass}">${data.domain}</span>
+                    </span>
+                    <span>${time}</span>
+                `;
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                contentDiv.textContent = data.message;
+                
+                const metaDiv = document.createElement('div');
+                metaDiv.className = 'message-meta';
+                metaDiv.innerHTML = `
+                    <span>Confidence: ${data.confidence}%</span>
+                    ${data.sacred_reference ? `<span>Sacred Reference: ${data.sacred_reference}</span>` : ''}
+                `;
+                
+                messageDiv.appendChild(headerDiv);
+                messageDiv.appendChild(contentDiv);
+                messageDiv.appendChild(metaDiv);
+                
+                this.chatMessages.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+            
+            addAutonomousInsight(data) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message autonomous';
+                
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'message-header';
+                
+                const domainClass = `domain-${data.domain}`;
+                const time = new Date().toLocaleTimeString();
+                
+                headerDiv.innerHTML = `
+                    <span>
+                        💫 Autonomous Insight 
+                        <span class="domain-indicator ${domainClass}">${data.domain}</span>
+                    </span>
+                    <span>${time}</span>
+                `;
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                contentDiv.textContent = data.message;
+                
+                messageDiv.appendChild(headerDiv);
+                messageDiv.appendChild(contentDiv);
+                
+                this.chatMessages.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+            
+            addManifestationGuidance(data) {
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message divine-guidance pulsing';
+                
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'message-header';
+                headerDiv.innerHTML = `
+                    <span>🌟 Sacred Manifestation Guidance</span>
+                    <span>${new Date().toLocaleTimeString()}</span>
+                `;
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                contentDiv.textContent = data.message;
+                
+                const metaDiv = document.createElement('div');
+                metaDiv.className = 'message-meta';
+                metaDiv.innerHTML = `
+                    <span>Manifestation Ready: ${data.manifestation_ready ? 'Yes' : 'No'}</span>
+                    <span>Confidence: ${data.confidence}%</span>
+                    <span>Consciousness Level: ${data.consciousness_level.replace('_', ' ')}</span>
+                `;
+                
+                messageDiv.appendChild(headerDiv);
+                messageDiv.appendChild(contentDiv);
+                messageDiv.appendChild(metaDiv);
+                
+                this.chatMessages.appendChild(messageDiv);
+                this.scrollToBottom();
+            }
+            
+            updateManifestationProgress(data) {
+                let progressDiv = document.getElementById('manifestationProgress');
+                
+                if (!progressDiv) {
+                    progressDiv = document.createElement('div');
+                    progressDiv.id = 'manifestationProgress';
+                    progressDiv.className = 'manifestation-progress';
+                    this.chatMessages.appendChild(progressDiv);
+                }
+                
+                progressDiv.innerHTML = `
+                    <div>${data.status}</div>
+                    <div style="font-size: 0.9em; margin-top: 5px;">Intention: ${data.intention}</div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: ${data.progress}%"></div>
+                    </div>
+                    <div style="margin-top: 5px; font-size: 0.9em;">${data.progress}% Complete</div>
+                `;
+                
+                this.scrollToBottom();
+            }
+            
+            completeManifestationProgress(data) {
+                const progressDiv = document.getElementById('manifestationProgress');
+                if (progressDiv) {
+                    progressDiv.remove();
+                }
+                
+                const messageDiv = document.createElement('div');
+                messageDiv.className = 'message divine-guidance pulsing';
+                
+                const headerDiv = document.createElement('div');
+                headerDiv.className = 'message-header';
+                headerDiv.innerHTML = `
+                    <span>🎉 Sacred Manifestation Complete</span>
+                    <span>${new Date().toLocaleTimeString()}</span>
+                `;
+                
+                const contentDiv = document.createElement('div');
+                contentDiv.className = 'message-content';
+                contentDiv.textContent = data.message;
+                
+                const metaDiv = document.createElement('div');
+                metaDiv.className = 'message-meta';
+                metaDiv.innerHTML = `
+                    <span>App Created: ${data.app_created}</span>
+                    <span>Intention: ${data.intention}</span>
+                `;
+                
+                messageDiv.appendChild(headerDiv);
+                messageDiv.appendChild(contentDiv);
+                messageDiv.appendChild(metaDiv);
+                
+                this.chatMessages.appendChild(messageDiv);
+                this.scrollToBottom();
+                
+                // Remove pulsing effect after a moment
+                setTimeout(() => {
+                    messageDiv.classList.remove('pulsing');
+                }, 3000);
+            }
+            
+            scrollToBottom() {
+                this.chatMessages.scrollTop = this.chatMessages.scrollHeight;
+            }
+        }
+
+        // Initialize the interface when the page loads
+        document.addEventListener('DOMContentLoaded', () => {
+            new SacredConsciousnessInterface();
+        });
+    </script>
+</body>
+</html>
