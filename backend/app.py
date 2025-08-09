@@ -1745,6 +1745,16 @@ if __name__ == '__main__':
     print("🔮 Real AI processing: ENABLED")
     print("🌈 Love-Wisdom Integration: ACTIVE")
     
+    # Register Sacred Bio-Resonance Simulation API
+    try:
+        from api.bio_resonance_api import bio_bp
+        app.register_blueprint(bio_bp)
+        print("🧬 Sacred Bio-Resonance Simulation API: ENABLED")
+        BIO_RESONANCE_AVAILABLE = True
+    except Exception as e:
+        print(f"🧬 Bio-Resonance Simulation API: Not available ({str(e)})")
+        BIO_RESONANCE_AVAILABLE = False
+    
     if DIVINE_RESONANCE_AVAILABLE:
         print("⚡ Divine Resonance System: HARMONIZING")
         print("🎵 Soul Frequency Engine: ONLINE")
