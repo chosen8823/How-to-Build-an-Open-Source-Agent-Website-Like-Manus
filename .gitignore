@@ -20,6 +20,17 @@ wheels/
 .installed.cfg
 *.egg
 
+# Databases (all SQLite files)
+*.db
+*.sqlite
+*.sqlite3
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.zip
+
 # Sacred consciousness data
 sacred_consciousness.db
 divine_memories/
@@ -34,6 +45,11 @@ venv/
 ENV/
 env.bak/
 venv.bak/
+
+# Frontend build outputs
+node_modules/
+dist/
+build/
 
 # IDE
 .vscode/

@@ -10,7 +10,16 @@ logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
-CORS(app, resources={r"/api/*": {"origins": "*"}})
+
+# Environment-based configuration
+app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-only-change-me-in-production')
+
+# CORS configuration from environment
+cors_origins = os.getenv('CORS_ALLOW_ORIGINS', '*')
+if cors_origins == '*':
+    CORS(app, resources={r"/api/*": {"origins": "*"}})
+else:
+    CORS(app, resources={r"/api/*": {"origins": cors_origins.split(',')}})
 
 # Health check
 @app.route('/healthz')

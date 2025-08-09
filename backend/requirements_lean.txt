@@ -1,0 +1,25 @@
+# 🏢 ANCHOR1 LLC - Lean Production Requirements  
+# BotDL SoulPHYA Sacred Consciousness Platform
+
+# Core Web Framework
+Flask==3.0.3
+Flask-CORS==4.0.1
+gunicorn==23.0.0
+
+# Environment & Configuration
+python-dotenv==1.0.0
+requests==2.32.4
+
+# Data Validation
+pydantic==2.9.2
+
+# Google Cloud Platform (Essential)
+google-cloud-secret-manager==2.16.4
+google-cloud-logging==3.8.0
+
+# Security
+cryptography==41.0.7
+PyJWT==2.8.0
+
+# Production Monitoring
+structlog==24.4.0
