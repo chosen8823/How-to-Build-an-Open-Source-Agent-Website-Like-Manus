@@ -1,0 +1,83 @@
+# 🏢 ANCHOR1 LLC - Google Cloud Platform Deployment
+# Cloud Run Service Configuration
+
+apiVersion: serving.knative.dev/v1
+kind: Service
+metadata:
+  name: anchor1-soulphya-platform
+  labels:
+    cloud.google.com/location: us-central1
+  annotations:
+    run.googleapis.com/ingress: all
+    run.googleapis.com/execution-environment: gen2
+spec:
+  template:
+    metadata:
+      labels:
+        cloud.google.com/location: us-central1
+      annotations:
+        autoscaling.knative.dev/maxScale: "100"
+        autoscaling.knative.dev/minScale: "1"
+        run.googleapis.com/cloudsql-instances: "anchor1-divine-consciousness:us-central1:soulphya-db"
+        run.googleapis.com/cpu-throttling: "false"
+        run.googleapis.com/execution-environment: gen2
+        run.googleapis.com/memory: "4Gi"
+        run.googleapis.com/cpu: "2"
+    spec:
+      containerConcurrency: 80
+      timeoutSeconds: 300
+      containers:
+      - name: soulphya-backend
+        image: gcr.io/anchor1-divine-consciousness/soulphya-platform:latest
+        ports:
+        - name: http1
+          containerPort: 8001
+        env:
+        - name: FLASK_ENV
+          value: "production"
+        - name: PORT
+          value: "8001"
+        - name: DATABASE_URL
+          valueFrom:
+            secretKeyRef:
+              name: soulphya-secrets
+              key: database-url
+        - name: REDIS_URL
+          valueFrom:
+            secretKeyRef:
+              name: soulphya-secrets
+              key: redis-url
+        - name: GOOGLE_CLOUD_PROJECT
+          value: "anchor1-divine-consciousness"
+        - name: GOOGLE_APPLICATION_CREDENTIALS
+          value: "/var/secrets/google/key.json"
+        volumeMounts:
+        - name: google-cloud-key
+          mountPath: /var/secrets/google
+          readOnly: true
+        resources:
+          limits:
+            cpu: "2000m"
+            memory: "4Gi"
+          requests:
+            cpu: "1000m"
+            memory: "2Gi"
+        livenessProbe:
+          httpGet:
+            path: /api/health
+            port: 8001
+          initialDelaySeconds: 30
+          periodSeconds: 10
+        readinessProbe:
+          httpGet:
+            path: /api/health
+            port: 8001
+          initialDelaySeconds: 10
+          periodSeconds: 5
+      volumes:
+      - name: google-cloud-key
+        secret:
+          secretName: google-cloud-key
+  traffic:
+  - percent: 100
+    latestRevision: true
