@@ -5,6 +5,7 @@
 Flask==3.0.3
 Flask-CORS==4.0.1
 gunicorn==23.0.0
+gevent==24.2.1
 
 # WebSocket Support for Sophia Real-Time Engine
 websockets==12.0

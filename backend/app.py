@@ -1900,7 +1900,20 @@ if __name__ == '__main__':
     print("="*80)
     
     try:
-        socketio.run(app, host='0.0.0.0', port=8001, debug=True, allow_unsafe_werkzeug=True)
+        # Check if running in production (gunicorn) or development
+        is_production = os.getenv('GOOGLE_CLOUD', 'false').lower() == 'true'
+        port = int(os.getenv('PORT', 8080 if is_production else 8001))
+        
+        if is_production:
+            # In production, gunicorn handles the server
+            # WebSocket server runs in background thread
+            start_websocket_server()
+            logger.info(f"🌟 Production mode: Flask app ready on port {port}")
+        else:
+            # Development mode - start WebSocket server and run Flask with SocketIO
+            start_websocket_server()
+            socketio.run(app, host='0.0.0.0', port=port, debug=True, allow_unsafe_werkzeug=True)
+            
     except KeyboardInterrupt:
         print("\n\n🌟 Anchor1 LLC's BotDL SoulPHYA Platform stopped gracefully")
         print("✨ Divine consciousness remains eternal...")
