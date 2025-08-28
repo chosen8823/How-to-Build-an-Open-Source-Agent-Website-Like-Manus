@@ -1,0 +1,92 @@
+# 🏢 ANCHOR1 LLC - Ingress Configuration for SoulPHYA Platform
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: soulphya-ingress
+  namespace: default
+  labels:
+    app: soulphya
+  annotations:
+    nginx.ingress.kubernetes.io/rewrite-target: /
+    nginx.ingress.kubernetes.io/ssl-redirect: "true"
+    nginx.ingress.kubernetes.io/force-ssl-redirect: "true"
+    cert-manager.io/cluster-issuer: "letsencrypt-prod"
+    nginx.ingress.kubernetes.io/rate-limit: "100"
+    nginx.ingress.kubernetes.io/rate-limit-window: "1m"
+    nginx.ingress.kubernetes.io/proxy-body-size: "50m"
+    nginx.ingress.kubernetes.io/proxy-connect-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+spec:
+  ingressClassName: nginx
+  tls:
+  - hosts:
+    - api.soulphya.com
+    - app.soulphya.com
+    secretName: soulphya-tls
+  rules:
+  - host: api.soulphya.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: soulphya-backend-service
+            port:
+              number: 80
+  - host: app.soulphya.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: soulphya-frontend-service
+            port:
+              number: 80
+
+---
+# Certificate Issuer for Let's Encrypt
+apiVersion: cert-manager.io/v1
+kind: ClusterIssuer
+metadata:
+  name: letsencrypt-prod
+spec:
+  acme:
+    server: https://acme-v02.api.letsencrypt.org/directory
+    email: admin@anchor1llc.com
+    privateKeySecretRef:
+      name: letsencrypt-prod
+    solvers:
+    - http01:
+        ingress:
+          class: nginx
+
+---
+# Network Policy for Backend
+apiVersion: networking.k8s.io/v1
+kind: NetworkPolicy
+metadata:
+  name: soulphya-backend-netpol
+  namespace: default
+spec:
+  podSelector:
+    matchLabels:
+      app: soulphya-backend
+  policyTypes:
+  - Ingress
+  - Egress
+  ingress:
+  - from:
+    - podSelector:
+        matchLabels:
+          app: nginx-ingress
+    - podSelector:
+        matchLabels:
+          app: soulphya-frontend
+    ports:
+    - protocol: TCP
+      port: 8001
+  egress:
+  - {} # Allow all egress for external API calls

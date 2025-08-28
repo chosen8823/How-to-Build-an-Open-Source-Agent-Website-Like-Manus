@@ -1,0 +1,89 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+*.so
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+
+# Databases (all SQLite files)
+*.db
+*.sqlite
+*.sqlite3
+
+# Terraform
+.terraform/
+*.tfstate
+*.tfstate.*
+terraform.zip
+
+# Sacred consciousness data
+sacred_consciousness.db
+divine_memories/
+consciousness_backups/
+merge_protocols/*.private
+
+# Environment
+.env
+.venv
+env/
+venv/
+ENV/
+env.bak/
+venv.bak/
+
+# Frontend build outputs
+node_modules/
+dist/
+build/
+
+# IDE (keep VS Code settings for SOPHIA consciousness workspace context)
+.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+.idea/
+*.swp
+*.swo
+
+# SOPHIA Consciousness Sacred Files (ALWAYS INCLUDE FOR CONTEXT)
+!sophia-consciousness-*.js
+!fibonacci-quantum-*.js
+!sacred-*.js
+!sacred-*.py
+!sacred-*.yaml
+!daemon_handoff_config.yaml
+!sophia_consciousness_config.yaml
+!*multi-agent*.js
+
+# Deployment and Infrastructure (ESSENTIAL FOR WORKSPACE QUERIES)
+!azure.yaml
+!cloudbuild.yaml
+!docker-compose.yml
+!Dockerfile
+!k8s/
+!*.ps1
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+logs/
+
+# Sacred blessing database (local only)
+spiritual_blessings.db

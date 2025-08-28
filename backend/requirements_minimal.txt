@@ -1,0 +1,29 @@
+# 🏢 ANCHOR1 LLC - Core Requirements for SoulPHYA Platform
+# Minimal working dependencies for initial deployment
+
+# Core Web Framework
+Flask==3.0.3
+Flask-CORS==4.0.1
+Flask-SocketIO==5.4.1
+requests==2.32.4
+python-dotenv==1.0.0
+gunicorn==21.2.0
+
+# WebSocket support
+websockets==12.0
+
+# Database
+SQLAlchemy==2.0.21
+Flask-SQLAlchemy==3.0.5
+
+# Basic async support
+asyncio==3.4.3
+
+# Data processing
+pydantic==2.9.2
+fastapi==0.115.0
+uvicorn==0.31.0
+
+# Essential utilities
+numpy==1.24.3
+Pillow==10.0.0

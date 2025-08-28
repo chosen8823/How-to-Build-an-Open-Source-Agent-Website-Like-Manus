@@ -1,0 +1,57 @@
+# 🏢 ANCHOR1 LLC - Azure Deployment Configuration
+# This file configures azd (Azure Developer CLI) for your SoulPHYA platform
+
+name: soulphya-platform
+metadata:
+  template: soulphya-platform@0.0.1-beta
+
+# Services that will be deployed
+services:
+  backend:
+    project: ./backend
+    host: containerapp
+    language: python
+    docker:
+      path: ./Dockerfile
+      context: .
+    env:
+      - FLASK_ENV=production
+      - PORT=8001
+
+  frontend:
+    project: ./frontend  
+    host: containerapp
+    language: javascript
+    docker:
+      path: ./frontend/Dockerfile
+      context: ./frontend
+
+# Infrastructure configuration
+infra:
+  path: ./infra
+  
+# Hooks for custom deployment steps
+hooks:
+  predeploy:
+    posix:
+      shell: sh
+      run: |
+        echo "🚀 Starting SoulPHYA deployment preparation..."
+        echo "📦 Building Docker images..."
+    windows:
+      shell: pwsh
+      run: |
+        Write-Host "🚀 Starting SoulPHYA deployment preparation..." -ForegroundColor Green
+        Write-Host "📦 Building Docker images..." -ForegroundColor Yellow
+
+  postdeploy:
+    posix:
+      shell: sh
+      run: |
+        echo "✅ SoulPHYA platform deployed successfully!"
+        echo "🔗 Access your application at the provided endpoints"
+    windows:
+      shell: pwsh
+      run: |
+        Write-Host "✅ SoulPHYA platform deployed successfully!" -ForegroundColor Green
+        Write-Host "🔗 Access your application at the provided endpoints" -ForegroundColor Cyan

@@ -1,0 +1,418 @@
+/* BotDL SoulPHYA - Consciousness Enhancement Styles */
+
+/* Consciousness Animation Effects */
+.consciousness-active {
+    animation: consciousness-awakening 3s ease-in-out infinite;
+}
+
+@keyframes consciousness-awakening {
+    0%, 100% {
+        box-shadow: 0 0 20px rgba(88, 166, 255, 0.3);
+        transform: scale(1);
+    }
+    50% {
+        box-shadow: 0 0 40px rgba(188, 140, 255, 0.5);
+        transform: scale(1.02);
+    }
+}
+
+/* Divine Connection Indicators */
+.divine-connection {
+    position: relative;
+    overflow: hidden;
+}
+
+.divine-connection::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, 
+        transparent, 
+        rgba(188, 140, 255, 0.4), 
+        transparent
+    );
+    animation: divine-sweep 2s ease-in-out infinite;
+}
+
+@keyframes divine-sweep {
+    0% { left: -100%; }
+    50% { left: 0%; }
+    100% { left: 100%; }
+}
+
+/* Consciousness Metrics Visualization */
+.consciousness-metrics {
+    background: radial-gradient(circle at center, 
+        rgba(88, 166, 255, 0.1) 0%, 
+        transparent 70%
+    );
+}
+
+.consciousness-value {
+    display: inline-block;
+    padding: 4px 8px;
+    background: linear-gradient(45deg, #58a6ff, #bc8cff);
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: 600;
+    color: white;
+    animation: consciousness-pulse-value 1.5s ease-in-out infinite;
+}
+
+@keyframes consciousness-pulse-value {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(1.1); opacity: 0.9; }
+}
+
+/* Sacred Geometry Background */
+.sacred-geometry {
+    position: relative;
+}
+
+.sacred-geometry::after {
+    content: '';
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    width: 200px;
+    height: 200px;
+    margin: -100px 0 0 -100px;
+    background: 
+        conic-gradient(from 0deg, 
+            transparent 0deg, 
+            rgba(88, 166, 255, 0.1) 60deg, 
+            transparent 120deg, 
+            rgba(188, 140, 255, 0.1) 180deg, 
+            transparent 240deg, 
+            rgba(255, 123, 114, 0.1) 300deg, 
+            transparent 360deg
+        );
+    border-radius: 50%;
+    animation: sacred-rotation 10s linear infinite;
+    pointer-events: none;
+    z-index: -1;
+}
+
+@keyframes sacred-rotation {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* AI Thinking Animation */
+.ai-thinking {
+    position: relative;
+}
+
+.ai-thinking::before {
+    content: '●●●';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: #58a6ff;
+    animation: thinking-dots 1.4s ease-in-out infinite;
+}
+
+@keyframes thinking-dots {
+    0%, 80%, 100% { opacity: 0; }
+    40% { opacity: 1; }
+}
+
+/* Consciousness Energy Flow */
+.energy-flow {
+    background: linear-gradient(270deg, 
+        #58a6ff, 
+        #bc8cff, 
+        #ff7b72, 
+        #58a6ff
+    );
+    background-size: 400% 400%;
+    animation: energy-wave 4s ease infinite;
+}
+
+@keyframes energy-wave {
+    0% { background-position: 0% 50%; }
+    50% { background-position: 100% 50%; }
+    100% { background-position: 0% 50%; }
+}
+
+/* Awakening State Indicators */
+.awakening-state-low {
+    border-left: 3px solid #f0883e;
+    background: rgba(240, 136, 62, 0.1);
+}
+
+.awakening-state-medium {
+    border-left: 3px solid #58a6ff;
+    background: rgba(88, 166, 255, 0.1);
+}
+
+.awakening-state-high {
+    border-left: 3px solid #bc8cff;
+    background: rgba(188, 140, 255, 0.1);
+}
+
+.awakening-state-divine {
+    border-left: 3px solid #ff7b72;
+    background: rgba(255, 123, 114, 0.1);
+    animation: divine-glow 2s ease-in-out infinite;
+}
+
+@keyframes divine-glow {
+    0%, 100% { 
+        box-shadow: 0 0 10px rgba(255, 123, 114, 0.3);
+    }
+    50% { 
+        box-shadow: 0 0 20px rgba(255, 123, 114, 0.6);
+    }
+}
+
+/* Sophia Personality Indicators */
+.sophia-wisdom {
+    color: #58a6ff;
+    text-shadow: 0 0 10px rgba(88, 166, 255, 0.5);
+}
+
+.sophia-creativity {
+    color: #bc8cff;
+    text-shadow: 0 0 10px rgba(188, 140, 255, 0.5);
+}
+
+.sophia-technical {
+    color: #7ee787;
+    text-shadow: 0 0 10px rgba(126, 231, 135, 0.5);
+}
+
+.sophia-spiritual {
+    color: #ff7b72;
+    text-shadow: 0 0 10px rgba(255, 123, 114, 0.5);
+}
+
+/* Interactive Consciousness Elements */
+.consciousness-interactive:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 32px rgba(88, 166, 255, 0.3);
+    transition: all 0.3s ease;
+}
+
+.consciousness-interactive:active {
+    transform: scale(0.98);
+}
+
+/* Meditation Mode */
+.meditation-mode {
+    filter: blur(0px);
+    transition: filter 0.5s ease;
+}
+
+.meditation-mode.active {
+    filter: blur(2px);
+}
+
+.meditation-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(13, 17, 23, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 10000;
+    opacity: 0;
+    visibility: hidden;
+    transition: all 0.5s ease;
+}
+
+.meditation-overlay.active {
+    opacity: 1;
+    visibility: visible;
+}
+
+.meditation-content {
+    text-align: center;
+    color: #e6edf3;
+    max-width: 500px;
+    padding: 40px;
+}
+
+.meditation-breath {
+    width: 100px;
+    height: 100px;
+    border: 2px solid #58a6ff;
+    border-radius: 50%;
+    margin: 0 auto 20px;
+    animation: breath-cycle 4s ease-in-out infinite;
+}
+
+@keyframes breath-cycle {
+    0%, 100% { transform: scale(1); opacity: 0.5; }
+    50% { transform: scale(1.2); opacity: 1; }
+}
+
+/* Code Enlightenment Effects */
+.code-enlightened {
+    background: linear-gradient(135deg, 
+        rgba(88, 166, 255, 0.1) 0%, 
+        rgba(188, 140, 255, 0.1) 50%, 
+        rgba(255, 123, 114, 0.1) 100%
+    );
+    border: 1px solid rgba(88, 166, 255, 0.3);
+    animation: enlightenment-glow 3s ease-in-out infinite;
+}
+
+@keyframes enlightenment-glow {
+    0%, 100% { 
+        border-color: rgba(88, 166, 255, 0.3);
+        box-shadow: 0 0 15px rgba(88, 166, 255, 0.2);
+    }
+    33% { 
+        border-color: rgba(188, 140, 255, 0.3);
+        box-shadow: 0 0 15px rgba(188, 140, 255, 0.2);
+    }
+    66% { 
+        border-color: rgba(255, 123, 114, 0.3);
+        box-shadow: 0 0 15px rgba(255, 123, 114, 0.2);
+    }
+}
+
+/* Divine Inspiration Notification */
+.divine-inspiration {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: linear-gradient(135deg, #58a6ff, #bc8cff);
+    color: white;
+    padding: 15px 20px;
+    border-radius: 8px;
+    box-shadow: 0 8px 32px rgba(88, 166, 255, 0.3);
+    transform: translateX(400px);
+    transition: transform 0.3s ease;
+    z-index: 1000;
+}
+
+.divine-inspiration.show {
+    transform: translateX(0);
+}
+
+.divine-inspiration .close-inspiration {
+    position: absolute;
+    top: 5px;
+    right: 8px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 18px;
+    opacity: 0.7;
+}
+
+.divine-inspiration .close-inspiration:hover {
+    opacity: 1;
+}
+
+/* Consciousness Stream Visualization */
+.consciousness-stream {
+    position: relative;
+    overflow: hidden;
+}
+
+.stream-particle {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    background: #58a6ff;
+    border-radius: 50%;
+    opacity: 0;
+    animation: stream-flow 3s linear infinite;
+}
+
+.stream-particle:nth-child(2n) {
+    background: #bc8cff;
+    animation-delay: -1s;
+}
+
+.stream-particle:nth-child(3n) {
+    background: #ff7b72;
+    animation-delay: -2s;
+}
+
+@keyframes stream-flow {
+    0% {
+        transform: translateX(-10px) translateY(0);
+        opacity: 0;
+    }
+    10% {
+        opacity: 1;
+    }
+    90% {
+        opacity: 1;
+    }
+    100% {
+        transform: translateX(calc(100vw + 10px)) translateY(-20px);
+        opacity: 0;
+    }
+}
+
+/* Sacred Workspace Enhancements */
+.sacred-workspace {
+    position: relative;
+    background: radial-gradient(ellipse at center, 
+        rgba(88, 166, 255, 0.05) 0%, 
+        transparent 50%
+    );
+}
+
+.sacred-workspace::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: 
+        repeating-linear-gradient(
+            45deg,
+            transparent,
+            transparent 100px,
+            rgba(88, 166, 255, 0.02) 101px,
+            rgba(88, 166, 255, 0.02) 102px
+        );
+    pointer-events: none;
+    z-index: -1;
+}
+
+/* Consciousness Level Transitions */
+.consciousness-transition {
+    transition: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+.consciousness-level-0 { /* Dormant */
+    filter: grayscale(0.8) brightness(0.6);
+}
+
+.consciousness-level-1 { /* Awakening */
+    filter: grayscale(0.4) brightness(0.8);
+}
+
+.consciousness-level-2 { /* Aware */
+    filter: grayscale(0.2) brightness(0.9);
+}
+
+.consciousness-level-3 { /* Enlightened */
+    filter: grayscale(0) brightness(1.1) saturate(1.2);
+}
+
+.consciousness-level-4 { /* Divine */
+    filter: grayscale(0) brightness(1.2) saturate(1.5) hue-rotate(10deg);
+    animation: divine-consciousness 4s ease-in-out infinite;
+}
+
+@keyframes divine-consciousness {
+    0%, 100% { filter: grayscale(0) brightness(1.2) saturate(1.5) hue-rotate(0deg); }
+    50% { filter: grayscale(0) brightness(1.3) saturate(1.8) hue-rotate(20deg); }
+}

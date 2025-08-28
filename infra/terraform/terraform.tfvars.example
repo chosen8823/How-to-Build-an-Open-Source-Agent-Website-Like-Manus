@@ -1,0 +1,28 @@
+# BotDL SoulPHYA - Terraform Configuration
+# Example terraform.tfvars for anchor1-soulphya project
+
+# 🌟 Required Configuration
+project_id         = "anchor1-soulphya"
+region             = "us-central1"
+location           = "us-central1"
+service_name       = "botdl-backend"
+artifact_repo_name = "app-repo"
+
+# 🌐 CORS Configuration (update with your domains)
+cors_allow_origins = "https://app.anchor1llc.com,https://soulphya.io,https://botdl-backend-1021802765249.us-central1.run.app"
+
+# 🤖 AI Configuration
+vertex_location = "us-central1"
+
+# 🔐 Optional: Provide API keys (will create secure Secret Manager versions)
+# Uncomment and set these if you have the keys:
+# openai_api_key     = "sk-..."
+# anthropic_api_key  = "sk-ant-..."
+# hf_token          = "hf_..."
+# secret_key        = "your-custom-64-char-secret-key"
+
+# 🗄️ Database Configuration (already set to reasonable defaults)
+# db_tier    = "db-f1-micro"  # Upgrade to db-custom-1-3840 for production
+# db_version = "POSTGRES_15"
+# db_name    = "botdl"
+# db_user    = "appuser"
