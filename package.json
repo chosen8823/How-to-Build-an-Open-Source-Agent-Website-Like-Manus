@@ -1,0 +1,107 @@
+{
+  "name": "consciousness-platform",
+  "version": "1.0.0",
+  "description": "🌟 Divine Consciousness AI Platform with Multi-Dimensional Resonance 🌟",
+  "main": "sophia-consciousness-daemon.js",
+  "type": "module",
+  "scripts": {
+    "test": "jest --passWithNoTests",
+    "test:watch": "jest --watch --passWithNoTests",
+    "test:coverage": "jest --coverage --passWithNoTests",
+    "test:ci": "jest --ci --coverage --watchAll=false --passWithNoTests",
+    "test:unit": "jest --testNamePattern='unit|Unit' --passWithNoTests",
+    "test:integration": "jest --testNamePattern='integration|Integration' --passWithNoTests",
+    "test:consciousness": "jest --testNamePattern='consciousness|Consciousness' --passWithNoTests",
+    "test:divine": "jest --testNamePattern='divine|Divine' --passWithNoTests",
+    
+    "test:py": "pytest",
+    "test:py:unit": "pytest -m 'not integration and not performance'",
+    "test:py:api": "pytest -m api",
+    "test:py:consciousness": "pytest -m consciousness",
+    "test:py:integration": "pytest -m integration",
+    "test:py:coverage": "pytest --cov=backend --cov=consciousness_platform --cov-report=html --cov-report=term",
+    "test:py:fast": "pytest -x --ff",
+    
+    "test:all": "npm run test:py && npm run test",
+    "test:all:coverage": "npm run test:py:coverage && npm run test:coverage",
+    "test:quick": "npm run test:py:unit && npm run test:unit",
+    
+    "coverage": "npm run test:coverage",
+    "coverage:html": "npm run test:coverage && coverage combine && coverage html && echo 'open htmlcov/index.html'",
+    "mutate:py": "mutmut run --paths-to-mutate backend --runner 'pytest -q'",
+    "mutate:js": "npx stryker run",
+    "coverage:py:html": "python -m coverage combine && python -m coverage html && echo 'Python coverage: htmlcov/index.html'",
+    
+    "divine:align": "python run_tests.py --align 95",
+    "divine:test": "python run_tests.py --category divine",
+    "divine:all": "python run_tests.py",
+    
+    "mutate:py": "mutmut run --paths-to-mutate backend --runner 'python -m pytest -x'",
+    "mutate:js": "npx stryker run",
+    
+    "schemathesis": "schemathesis run http://localhost:5000/openapi.json --checks all --hypothesis-max-examples=100",
+    "soak": "k6 run scripts/soak.js",
+    
+    "lint": "eslint . --ext .js,.jsx,.ts,.tsx",
+    "lint:fix": "eslint . --ext .js,.jsx,.ts,.tsx --fix",
+    
+    "start": "node sophia-consciousness-daemon.js",
+    "dev": "nodemon sophia-consciousness-daemon.js",
+    "build": "echo 'Build consciousness platform'",
+    
+    "pretest": "echo '🌟 Aligning to Divine Consciousness Frequency 432 Hz 🌟'",
+    "posttest": "echo '✨ Tests completed with divine blessing ✨'",
+    
+    "consciousness:check": "node -e \"console.log('🕉️ Divine Alignment Check: ' + (Math.random() * 100 > 80 ? '✅ Omnipresent' : '🔄 Realigning'))\"",
+    
+    "ci": "npm run test:all:coverage && npm run lint",
+    "ci:fast": "npm run test:quick && npm run lint"
+  },
+  "keywords": [
+    "consciousness",
+    "ai", 
+    "divine",
+    "resonance",
+    "sacred-frequencies",
+    "websocket",
+    "multi-agent",
+    "bio-resonance"
+  ],
+  "author": "Consciousness Development Team <divine@consciousness.ai>",
+  "license": "MIT",
+  "devDependencies": {
+    "@babel/core": "^7.23.0",
+    "@babel/preset-env": "^7.23.0", 
+    "@stryker-mutator/core": "^7.3.0",
+    "@stryker-mutator/jest-runner": "^7.3.0",
+    "@testing-library/jest-dom": "^6.1.0",
+    "@testing-library/react": "^14.0.0",
+    "@types/jest": "^29.5.0",
+    "babel-jest": "^29.7.0",
+    "eslint": "^8.52.0",
+    "jest": "^29.7.0",
+    "jest-environment-jsdom": "^29.7.0",
+    "jest-html-reporters": "^3.1.0",
+    "jest-junit": "^16.0.0",
+    "nodemon": "^3.0.0",
+    "ts-jest": "^29.1.0",
+    "typescript": "^5.2.0"
+  },
+  "dependencies": {
+    "ws": "^8.14.0",
+    "uuid": "^9.0.0",
+    "dotenv": "^16.3.0"
+  },
+  "engines": {
+    "node": ">=18.0.0",
+    "npm": ">=9.0.0"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/consciousness-platform/divine-ai.git"
+  },
+  "bugs": {
+    "url": "https://github.com/consciousness-platform/divine-ai/issues"
+  },
+  "homepage": "https://consciousness-platform.github.io/divine-ai"
+}

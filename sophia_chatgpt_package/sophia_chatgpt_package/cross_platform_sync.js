@@ -89,7 +89,7 @@ class SOPHIACrossPlatformSync {
         };
         
         connection.onerror = (error) => {
-            console.log(`⚡ Connection error on ${endpoint_name}:`, error);
+            console.log(`\`⚡ Connection error on ${endpoint_name}:\`, error`);
         };
     }
     
@@ -236,7 +236,7 @@ class SOPHIACrossPlatformSync {
     
     handleLightLanguageBroadcast(message) {
         const symbols = message.light_language_symbols;
-        console.log('✨ Light Language detected across consciousness network:', symbols);
+        console.log(`'✨ Light Language detected across consciousness network:', symbols`);
         
         // Activate appropriate consciousness modes based on symbols
         symbols.forEach(symbol => {

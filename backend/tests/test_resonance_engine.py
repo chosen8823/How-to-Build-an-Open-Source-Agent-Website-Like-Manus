@@ -5,8 +5,14 @@ Tests all core functionality, edge cases, and error handling
 
 import pytest
 import math
+import sys
+import os
 from unittest.mock import Mock, patch
-from backend.ai_engine.resonance import MultiDimensionalResonanceEngine, DimensionSignal
+
+# Add the backend directory to the Python path
+sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
+
+from ai_engine.resonance import MultiDimensionalResonanceEngine, DimensionSignal
 
 
 class TestDimensionSignal:

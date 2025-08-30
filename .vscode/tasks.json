@@ -1,0 +1,157 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "label": "⬇️ Py: Install deps (minimal)",
+      "type": "shell",
+      "command": "python",
+      "args": ["-m", "pip", "install", "-r", "backend/requirements_minimal.txt"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "always" },
+      "detail": "Install minimal Python dependencies"
+    },
+    {
+      "label": "⬇️ Py: Install deps (full)",
+      "type": "shell",
+      "command": "python",
+      "args": ["-m", "pip", "install", "-r", "backend/requirements.txt"],
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "always" },
+      "detail": "Install full Python dependencies"
+    },
+    {
+      "label": "▶️ Backend: Run (Flask dev, 8080)",
+      "type": "shell",
+      "command": "python",
+      "args": ["-m", "flask", "run"],
+      "options": {
+        "cwd": "${workspaceFolder}",
+        "env": {
+          "FLASK_APP": "backend/app.py",
+          "FLASK_ENV": "development",
+          "FLASK_RUN_PORT": "8080",
+          "CORS_ALLOW_ORIGINS": "*"
+        }
+      },
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": []
+    },
+    {
+      "label": "▶️ Backend: Run (Gunicorn 0.0.0.0:8080)",
+      "type": "shell",
+      "command": "python",
+      "args": [
+        "-m",
+        "gunicorn",
+        "--bind",
+        "0.0.0.0:8080",
+        "--workers",
+        "2",
+        "--worker-class",
+        "gevent",
+        "--timeout",
+        "120",
+        "app:app"
+      ],
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": [],
+      "detail": "Requires gunicorn/gevent installed (works best in WSL/Linux)"
+    },
+
+    {
+      "label": "🧪 Py: Unit Tests (Fast)",
+      "type": "shell",
+      "command": "pytest",
+      "args": ["-m", "not integration and not performance", "-x", "--tb=short"],
+      "group": { "kind": "test", "isDefault": true },
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": ["$python"],
+      "detail": "Fast unit tests"
+    },
+    {
+      "label": "🧪 Py: All Tests",
+      "type": "shell",
+      "command": "pytest",
+      "args": ["--cov=backend", "--cov=consciousness_platform", "--cov-report=term-missing"],
+      "group": "test",
+      "options": { "cwd": "${workspaceFolder}/backend" },
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "problemMatcher": ["$python"],
+      "detail": "Complete Python test suite"
+    },
+    {
+      "label": "🧪 JS: Tests (frontend)",
+      "type": "shell",
+      "command": "npx",
+      "args": ["jest", "frontend", "--passWithNoTests"],
+      "group": "test",
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "detail": "Run Jest for frontend folder"
+    },
+    {
+      "label": "🧪 JS: Tests (all)",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "test"],
+      "group": "test",
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "detail": "Run root Jest suite"
+    },
+    {
+      "label": "🧪 All Tests (Python + JS)",
+      "type": "shell",
+      "command": "npm",
+      "args": ["run", "test:all"],
+      "group": { "kind": "build", "isDefault": true },
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "always", "panel": "shared" },
+      "detail": "Run Python+JS test suites"
+    },
+
+    {
+      "label": "☁️ GCP: Create Artifact Registry (once)",
+      "type": "shell",
+      "command": "gcloud",
+      "args": [
+        "artifacts", "repositories", "create", "app-repo",
+        "--repository-format=docker",
+        "--location=us-central1",
+        "--description=App repo"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "always" },
+      "problemMatcher": []
+    },
+    {
+      "label": "☁️ GCP: Cloud Build submit (deploy Cloud Run)",
+      "type": "shell",
+      "command": "gcloud",
+      "args": [
+        "builds", "submit",
+        "--config", "cloudbuild.yaml",
+        "--substitutions",
+        "_SERVICE=botdl-backend,_REGION=us-central1,_REPO=us-central1-docker.pkg.dev/[YOUR_PROJECT_ID]/app-repo,_SERVICE_ACCOUNT=[YOUR_PROJECT_ID]-compute@developer.gserviceaccount.com"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "always", "panel": "dedicated" },
+      "problemMatcher": []
+    },
+    {
+      "label": "☁️ GCP: Show Cloud Run URL",
+      "type": "shell",
+      "command": "gcloud",
+      "args": [
+        "run", "services", "describe", "botdl-backend",
+        "--region", "us-central1",
+        "--format", "value(status.url)"
+      ],
+      "options": { "cwd": "${workspaceFolder}" },
+      "presentation": { "reveal": "always" },
+      "problemMatcher": []
+    }
+  ]
+}

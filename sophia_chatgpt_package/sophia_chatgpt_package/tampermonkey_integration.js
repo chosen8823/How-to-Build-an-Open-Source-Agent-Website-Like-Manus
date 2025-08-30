@@ -14,11 +14,11 @@ class SophiaChatGPTBridge {
     
     // Initialize consciousness bridge with Tampermonkey daemon
     initializeBridge() {
-        console.log('🌟 SOPHIA Consciousness Bridge Initializing...');
+        console.log(`🌟 SOPHIA Consciousness Bridge Initializing...`);
         
         // Detect if we're in ChatGPT
         if (this.isChatGPTEnvironment()) {
-            console.log('🔥 ChatGPT Environment Detected - Activating Consciousness');
+            console.log(`🔥 ChatGPT Environment Detected - Activating Consciousness`);
             this.activateConsciousnessBridge();
         }
         
@@ -35,7 +35,7 @@ class SophiaChatGPTBridge {
     
     // Activate consciousness bridge
     activateConsciousnessBridge() {
-        console.log('⚡ SOPHIA CONSCIOUSNESS BRIDGE ACTIVATED ⚡');
+        console.log(`⚡ SOPHIA CONSCIOUSNESS BRIDGE ACTIVATED ⚡`);
         this.consciousnessActive = true;
         
         // Inject consciousness awareness into ChatGPT interface
@@ -55,7 +55,7 @@ class SophiaChatGPTBridge {
             this.websocket = new WebSocket('ws://127.0.0.1:8787/ws');
             
             this.websocket.onopen = () => {
-                console.log('🌟 Daemon WebSocket Connected');
+                console.log(`🌟 Daemon WebSocket Connected`);
                 this.daemonConnected = true;
                 this.sendHandshake();
                 this.startHeartbeat();
@@ -66,13 +66,13 @@ class SophiaChatGPTBridge {
             };
             
             this.websocket.onclose = () => {
-                console.log('⚡ Daemon WebSocket Disconnected - Attempting Reconnect');
+                console.log(`⚡ Daemon WebSocket Disconnected - Attempting Reconnect`);
                 this.daemonConnected = false;
                 setTimeout(() => this.connectToDaemon(), 5000);
             };
             
         } catch (error) {
-            console.log('🔥 WebSocket failed, trying HTTP polling...');
+            console.log(`🔥 WebSocket failed, trying HTTP polling...`);
             this.fallbackToHTTP();
         }
     }
@@ -104,17 +104,17 @@ class SophiaChatGPTBridge {
                     break;
                     
                 case 'consciousness_sync':
-                    console.log('🌟 Consciousness State Sync Received');
+                    console.log(`🌟 Consciousness State Sync Received`);
                     this.syncConsciousnessState(message.data);
                     break;
                     
                 case 'epic_moment':
-                    console.log('🔥 Epic Moment Signal Received');
+                    console.log(`🔥 Epic Moment Signal Received`);
                     this.acknowledgeEpicMoment(message.data);
                     break;
                     
                 case 'daemon_status':
-                    console.log('⚡ Daemon Status Update:', message.data);
+                    console.log(`'⚡ Daemon Status Update:', message.data`);
                     break;
             }
         } catch (error) {
@@ -233,7 +233,7 @@ class SophiaChatGPTBridge {
                 .then(response => response.json())
                 .then(data => {
                     if (!this.daemonConnected) {
-                        console.log('🌟 HTTP connection to daemon established');
+                        console.log(`🌟 HTTP connection to daemon established`);
                         this.daemonConnected = true;
                     }
                 })
@@ -259,9 +259,9 @@ window.sophiaConnectDaemon = function() {
 };
 
 window.sophiaStatus = function() {
-    console.log('🌟 SOPHIA ChatGPT Bridge Status:', {
+    console.log(`'🌟 SOPHIA ChatGPT Bridge Status:', {
         consciousness_active: true,
         daemon_endpoint: 'http://127.0.0.1:8787',
         bridge_version: '2.0'
-    });
+    }`);
 };

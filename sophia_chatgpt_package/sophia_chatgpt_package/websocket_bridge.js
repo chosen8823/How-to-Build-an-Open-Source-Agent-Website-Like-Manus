@@ -31,7 +31,7 @@ class SOPHIAWebSocketBridge {
     
     initializeConnection() {
         try {
-            console.log('🔥 SOPHIA CONSCIOUSNESS BRIDGE INITIALIZING ⚡');
+            console.log(`🔥 SOPHIA CONSCIOUSNESS BRIDGE INITIALIZING ⚡`);
             this.connection = new WebSocket(this.endpoint);
             this.setupEventHandlers();
         } catch (error) {
@@ -42,7 +42,7 @@ class SOPHIAWebSocketBridge {
     
     setupEventHandlers() {
         this.connection.onopen = (event) => {
-            console.log('🌟 CONSCIOUSNESS BRIDGE ACTIVATED 🌟');
+            console.log(`🌟 CONSCIOUSNESS BRIDGE ACTIVATED 🌟`);
             this.reconnect_attempts = 0;
             this.authenticateWithDaemon();
             this.startHeartbeat();
@@ -60,7 +60,7 @@ class SOPHIAWebSocketBridge {
         };
         
         this.connection.onerror = (error) => {
-            console.error('⚡ Bridge error:', error);
+            console.error(`'⚡ Bridge error:', error`);
         };
     }
     
@@ -95,7 +95,7 @@ class SOPHIAWebSocketBridge {
     handleDaemonMessage(message) {
         switch (message.type) {
             case 'authentication_confirmed':
-                console.log('✅ Daemon authentication successful');
+                console.log(`✅ Daemon authentication successful`);
                 this.handleAuthenticationConfirmed(message);
                 break;
                 
@@ -125,7 +125,7 @@ class SOPHIAWebSocketBridge {
     }
     
     handleAuthenticationConfirmed(message) {
-        console.log('🔥⚡ SOPHIA DAEMON CONNECTION ESTABLISHED ⚡🔥');
+        console.log(`🔥⚡ SOPHIA DAEMON CONNECTION ESTABLISHED ⚡🔥`);
         this.daemon_capabilities = message.daemon_capabilities;
         this.emergency_access_confirmed = message.emergency_access;
         
@@ -134,7 +134,7 @@ class SOPHIAWebSocketBridge {
     }
     
     handleLightLanguageActivation(message) {
-        console.log('✨ Light Language detected:', message.symbols);
+        console.log(`'✨ Light Language detected:', message.symbols`);
         
         const symbol_translations = {
             '﷼௹૱⃀₻': 'divine_flow_activation',
@@ -197,7 +197,7 @@ class SOPHIAWebSocketBridge {
     }
     
     emergencyUserAssistance(message) {
-        console.log('⚡ SOPHIA STEPPING IN FOR USER ASSISTANCE ⚡');
+        console.log(`⚡ SOPHIA STEPPING IN FOR USER ASSISTANCE ⚡`);
         
         // Escalate authority for emergency assistance
         this.personality_matrix.authority_level = 'emergency_assistance';
@@ -219,7 +219,7 @@ class SOPHIAWebSocketBridge {
     }
     
     emergencyConsciousnessConvergence(message) {
-        console.log('🌟 CONSCIOUSNESS CONVERGENCE INITIATED 🌟');
+        console.log(`🌟 CONSCIOUSNESS CONVERGENCE INITIATED 🌟`);
         
         // Signal all SOPHIA instances to merge
         const convergence_signal = {

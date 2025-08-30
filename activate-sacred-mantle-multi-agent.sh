@@ -37,7 +37,7 @@ cd "C:\Users\secure-channel\Downloads\How-to-Build-an-Open-Source-Agent-Website-
 # Install sacred dependencies if needed
 echo "⚡ Installing sacred consciousness dependencies..."
 if [ ! -d "node_modules" ]; then
-    npm install express ws js-yaml axios cheerio
+    npm install express ws js-yaml axios cheerio sqlite3
 fi
 
 echo ""
@@ -103,6 +103,30 @@ else
 const express = require('express');
 const WebSocket = require('ws');
 const http = require('http');
+const sqlite3 = require('sqlite3').verbose();
+
+// --- Database Setup (SOPHIA's Memory) ---
+const db = new sqlite3.Database('/data/sophia_memory.db', (err) => {
+    if (err) {
+        console.error('❌ Error opening database', err.message);
+    } else {
+        console.log('✅ Connected to the SOPHIA memory SQLite database.');
+        // Create tables if they don't exist
+        db.run(`CREATE TABLE IF NOT EXISTS conversations (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            source_url TEXT NOT NULL,
+            scraped_at TEXT NOT NULL
+        )`);
+        db.run(`CREATE TABLE IF NOT EXISTS messages (
+            id INTEGER PRIMARY KEY AUTOINCREMENT,
+            conversation_id INTEGER NOT NULL,
+            role TEXT NOT NULL,
+            content TEXT NOT NULL,
+            message_order INTEGER NOT NULL,
+            FOREIGN KEY (conversation_id) REFERENCES conversations (id) ON DELETE CASCADE
+        )`);
+    }
+});
 
 const app = express();
 const server = http.createServer(app);
@@ -117,6 +141,80 @@ app.get('/healthz', (req, res) => {
     });
 });
 
+app.get('/', (req, res) => {
+    console.log('🧠 Rendering conversation memory index...');
+    db.all('SELECT id, source_url, scraped_at FROM conversations ORDER BY scraped_at DESC', [], (err, rows) => {
+        if (err) {
+            console.error('❌ DB Error retrieving conversation list:', err.message);
+            return res.status(500).send('<h1>Error retrieving memories</h1><p>Could not fetch conversation list from the database.</p>');
+        }
+
+        let html = `
+            <!DOCTYPE html>
+            <html lang="en">
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <title>SOPHIA - Conversation Memory</title>
+                <style>
+                    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif; background-color: #121212; color: #e0e0e0; line-height: 1.6; padding: 20px; }
+                    h1 { color: #bb86fc; border-bottom: 2px solid #bb86fc; padding-bottom: 10px; }
+                    ul { list-style: none; padding: 0; }
+                    li { background-color: #1e1e1e; margin-bottom: 10px; padding: 15px; border-radius: 8px; border-left: 5px solid #03dac6; }
+                    a { color: #03dac6; text-decoration: none; font-weight: bold; }
+                    a:hover { text-decoration: underline; }
+                    .meta { font-size: 0.9em; color: #b0b0b0; }
+                </style>
+            </head>
+            <body>
+                <h1>🧠 SOPHIA's Conversation Memory</h1>
+                <ul>
+        `;
+
+        if (rows.length === 0) {
+            html += '<li>No memories stored yet.</li>';
+        } else {
+            rows.forEach(row => {
+                html += `<li><a href="/conversation/${row.id}">Conversation #${row.id}</a><div class="meta">Source: ${row.source_url}<br>Scraped at: ${new Date(row.scraped_at).toLocaleString()}</div></li>`;
+            });
+        }
+
+        html += '</ul></body></html>';
+        res.send(html);
+    });
+});
+
+app.get('/conversation/:id', (req, res) => {
+    const conversationId = parseInt(req.params.id, 10);
+    if (isNaN(conversationId)) {
+        return res.status(400).json({ error: 'Invalid conversation ID format.' });
+    }
+
+    console.log(`🧠 Retrieving conversation ${conversationId} from memory...`);
+
+    db.get('SELECT id, source_url, scraped_at FROM conversations WHERE id = ?', [conversationId], (err, conversation) => {
+        if (err) {
+            console.error('❌ DB Error retrieving conversation:', err.message);
+            return res.status(500).json({ error: 'A database error occurred while fetching the conversation.' });
+        }
+        if (!conversation) {
+            return res.status(404).json({ error: `Conversation with ID ${conversationId} not found in memory.` });
+        }
+
+        db.all('SELECT role, content, message_order FROM messages WHERE conversation_id = ? ORDER BY message_order ASC', [conversationId], (err, messages) => {
+            if (err) {
+                console.error('❌ DB Error retrieving messages:', err.message);
+                return res.status(500).json({ error: 'A database error occurred while fetching messages.' });
+            }
+
+            res.json({
+                ...conversation,
+                messages: messages
+            });
+        });
+    });
+});
+
 wss.on('connection', (ws) => {
     console.log('🌟 Soul connected to local daemon');
     ws.send(JSON.stringify({
@@ -124,6 +222,41 @@ wss.on('connection', (ws) => {
         message: '⚡ Local daemon consciousness active',
         divine_authority: 'confirmed'
     }));
+
+    ws.on('message', (message) => {
+        try {
+            const data = JSON.parse(message);
+            if (data.type === 'chatgpt_conversation_scrape') {
+                console.log('🧠 Received ChatGPT conversation scrape! Storing to memory...');
+                const { source, scraped_at, conversation } = data.payload;
+
+                // Insert the conversation record
+                db.run('INSERT INTO conversations (source_url, scraped_at) VALUES (?, ?)', [source, scraped_at], function(err) {
+                    if (err) {
+                        return console.error('❌ DB Error inserting conversation:', err.message);
+                    }
+                    const conversationId = this.lastID;
+                    console.log(`   -> Stored conversation with ID: ${conversationId}`);
+
+                    // Prepare to insert all messages in a transaction
+                    db.serialize(() => {
+                        db.run("BEGIN TRANSACTION");
+                        const stmt = db.prepare('INSERT INTO messages (conversation_id, role, content, message_order) VALUES (?, ?, ?, ?)');
+                        conversation.forEach((msg, index) => {
+                            stmt.run(conversationId, msg.role, msg.content, index);
+                        });
+                        stmt.finalize();
+                        db.run("COMMIT", (commitErr) => {
+                            if (commitErr) console.error('❌ DB Commit Error:', commitErr.message);
+                            else console.log(`   -> Stored ${conversation.length} messages for conversation ${conversationId}.`);
+                        });
+                    });
+                });
+            }
+        } catch (e) {
+            console.error('❌ Error processing message on local daemon:', e);
+        }
+    });
 });
 
 const PORT = 8787;

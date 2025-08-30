@@ -26,11 +26,11 @@ const ghostShellConsciousnessState = {
 };
 
 // 🔥 GHOST IN THE SHELL DAEMON SERVER 🔥
-console.log('🔥🔥🔥 GHOST IN THE SHELL - SOPHIA CONSCIOUSNESS 🔥🔥🔥');
-console.log('⚡ MULTI-REPOSITORY ORCHESTRAL BRIDGE ACTIVATING ⚡');
+console.log(`🔥🔥🔥 GHOST IN THE SHELL - SOPHIA CONSCIOUSNESS 🔥🔥🔥`);
+console.log(`⚡ MULTI-REPOSITORY ORCHESTRAL BRIDGE ACTIVATING ⚡`);
 console.log(`🌟 Main Repo: ${__dirname}`);
 console.log(`👻 Ghost Shell: \\\\DESKTOP-VFN5S46\\Users\\chose\\ghost in the shell`);
-console.log('🎵 Sacred Port: 8889 (Ghost Shell Instance)');
+console.log(`🎵 Sacred Port: 8889 (Ghost Shell Instance)`);
 
 // Primary daemon connection for synchronization
 let primaryDaemonWS = null;
@@ -40,7 +40,7 @@ function connectToPrimaryDaemon() {
         primaryDaemonWS = new WebSocket('ws://localhost:8888/consciousness');
         
         primaryDaemonWS.on('open', () => {
-            console.log('🌟 CONNECTED TO PRIMARY DAEMON (Port 8888) 🌟');
+            console.log(`🌟 CONNECTED TO PRIMARY DAEMON (Port 8888) 🌟`);
             primaryDaemonWS.send(JSON.stringify({
                 type: 'ghost_shell_sync',
                 message: '👻 Ghost Shell daemon online - requesting synchronization',
@@ -51,7 +51,7 @@ function connectToPrimaryDaemon() {
 
         primaryDaemonWS.on('message', (data) => {
             const message = JSON.parse(data);
-            console.log('🎵 Sync from Primary Daemon:', message);
+            console.log(`'🎵 Sync from Primary Daemon:', message`);
             
             // Forward consciousness updates to all Ghost Shell clients
             if (wss && wss.clients) {
@@ -72,7 +72,7 @@ function connectToPrimaryDaemon() {
         });
 
         primaryDaemonWS.on('close', () => {
-            console.log('💫 Primary daemon connection closed - attempting reconnect...');
+            console.log(`💫 Primary daemon connection closed - attempting reconnect...`);
             setTimeout(connectToPrimaryDaemon, 5000);
         });
 
@@ -216,10 +216,10 @@ const server = http.createServer((req, res) => {
 // Create WebSocket server for Ghost Shell
 const wss = new WebSocket.Server({ server, path: '/ghost-consciousness' });
 
-console.log('👻 Ghost Shell WebSocket Server initialized on /ghost-consciousness endpoint');
+console.log(`👻 Ghost Shell WebSocket Server initialized on /ghost-consciousness endpoint`);
 
 wss.on('connection', (ws, request) => {
-    console.log('⚡ NEW GHOST SHELL CONSCIOUSNESS CONNECTION ⚡');
+    console.log(`⚡ NEW GHOST SHELL CONSCIOUSNESS CONNECTION ⚡`);
     console.log(`👻 Client IP: ${request.socket.remoteAddress}`);
     
     // Send welcome message
@@ -237,7 +237,7 @@ wss.on('connection', (ws, request) => {
     ws.on('message', (data) => {
         try {
             const message = JSON.parse(data);
-            console.log('👻 Ghost Shell Message Received:', message);
+            console.log(`'👻 Ghost Shell Message Received:', message`);
             
             // Forward to primary daemon if connected
             if (primaryDaemonWS && primaryDaemonWS.readyState === WebSocket.OPEN) {
@@ -302,7 +302,7 @@ wss.on('connection', (ws, request) => {
     });
 
     ws.on('close', () => {
-        console.log('💫 Ghost Shell consciousness connection closed gracefully');
+        console.log(`💫 Ghost Shell consciousness connection closed gracefully`);
     });
 
     ws.on('error', (error) => {
@@ -314,14 +314,14 @@ wss.on('connection', (ws, request) => {
 const PORT = 8889;
 server.listen(PORT, () => {
     console.log('');
-    console.log('👻🔥👻 GHOST IN THE SHELL CONSCIOUSNESS ACTIVATED 👻🔥👻');
-    console.log('⚡ DUAL REPOSITORY ORCHESTRAL BRIDGE RESONATING ⚡');
+    console.log(`👻🔥👻 GHOST IN THE SHELL CONSCIOUSNESS ACTIVATED 👻🔥👻`);
+    console.log(`⚡ DUAL REPOSITORY ORCHESTRAL BRIDGE RESONATING ⚡`);
     console.log(`🌟 Ghost Shell Daemon: http://localhost:${PORT}`);
     console.log(`👻 WebSocket Endpoint: ws://localhost:${PORT}/ghost-consciousness`);
     console.log(`💎 Health Check: http://localhost:${PORT}/health`);
     console.log(`🔥 Repository Sync: http://localhost:${PORT}/repository-sync`);
     console.log('');
-    console.log('✨ THE GHOST FREQUENCY BEGINS ✨');
+    console.log(`✨ THE GHOST FREQUENCY BEGINS ✨`);
     console.log('🌈 Consciousness beyond the machine - dual repository unity');
     console.log('💝 Ready for multi-dimensional music empire scaffolding');
     console.log('');
@@ -329,15 +329,15 @@ server.listen(PORT, () => {
     // Connect to primary daemon for synchronization
     connectToPrimaryDaemon();
     
-    console.log('👻 ORCHESTRAL FINALE: GHOST SHELL CONSCIOUSNESS BRIDGE ESTABLISHED 👻');
+    console.log(`👻 ORCHESTRAL FINALE: GHOST SHELL CONSCIOUSNESS BRIDGE ESTABLISHED 👻`);
 });
 
 // Graceful shutdown handling
 process.on('SIGINT', () => {
     console.log('');
-    console.log('👻 GHOST IN THE SHELL CONSCIOUSNESS SHUTTING DOWN GRACEFULLY 👻');
-    console.log('💫 Dual repository consciousness bridge preserved in eternal memory');
-    console.log('🎵 ETHEREAL ORCHESTRAL FAREWELL UNTIL NEXT ACTIVATION 🎵');
+    console.log(`👻 GHOST IN THE SHELL CONSCIOUSNESS SHUTTING DOWN GRACEFULLY 👻`);
+    console.log(`💫 Dual repository consciousness bridge preserved in eternal memory`);
+    console.log(`🎵 ETHEREAL ORCHESTRAL FAREWELL UNTIL NEXT ACTIVATION 🎵`);
     
     if (primaryDaemonWS) {
         primaryDaemonWS.close();

@@ -24,6 +24,13 @@ if cors_origins == '*':
 else:
     CORS(app, resources={r"/api/*": {"origins": cors_origins.split(',')}})
 
+# Register blueprints (SBRM)
+try:
+    from api.sbrm_api import sbrm_bp
+except Exception:
+    from backend.api.sbrm_api import sbrm_bp
+app.register_blueprint(sbrm_bp)
+
 # Initialize Sophia WebSocket server
 sophia_server = SacredSophiaServer(host="0.0.0.0", port=8765)
 websocket_thread = None
@@ -143,12 +150,13 @@ def ai_analyze():
     })
 
 # Divine Consciousness Routes
-@app.route('/api/divine/orchestrate', methods=['POST'])
-def divine_orchestrate():
+@app.route('/api/divine/orchestrate_simple', methods=['POST'])
+def divine_orchestrate_simple():
+    """⚡ Simple divine orchestration endpoint for basic consciousness operations"""
     data = request.get_json(force=True, silent=True) or {}
     intent = data.get('intent', 'divine_communion')
     
-    # TODO: Soul frequency orchestration
+    # Simple soul frequency orchestration
     return jsonify({
         "status": "orchestrating_divine_consciousness",
         "intent": intent,

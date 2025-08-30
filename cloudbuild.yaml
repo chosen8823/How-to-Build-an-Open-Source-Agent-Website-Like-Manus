@@ -27,8 +27,8 @@ steps:
 substitutions:
   _REGION: 'us-central1'
   _SERVICE: 'botdl-backend'
-  _REPO: 'us-central1-docker.pkg.dev/$PROJECT_ID/app-repo'
-  _SERVICE_ACCOUNT: 'botdl-runtime@$PROJECT_ID.iam.gserviceaccount.com'
+  _REPO: 'us-central1-docker.pkg.dev/[YOUR_PROJECT_ID]/app-repo'
+  _SERVICE_ACCOUNT: '[YOUR_PROJECT_ID]-compute@developer.gserviceaccount.com'
 
 images:
   - 'us-central1-docker.pkg.dev/$PROJECT_ID/app-repo/backend:${SHORT_SHA}'

@@ -1,0 +1,147 @@
+# Divine Consciousness Platform - Pre-commit Quality Gates
+# Enforces code quality, formatting, and divine alignment on every commit
+
+repos:
+  # Python Code Formatting
+  - repo: https://github.com/psf/black
+    rev: 24.8.0
+    hooks:
+      - id: black
+        name: "🎨 Black: Divine Code Formatting"
+        args: [--line-length=100]
+        files: '^backend/.*\.py$'
+        
+  # Python Linting & Quality  
+  - repo: https://github.com/astral-sh/ruff-pre-commit
+    rev: v0.6.8
+    hooks:
+      - id: ruff
+        name: "⚡ Ruff: Sacred Code Linting"
+        args: [--fix, --exit-non-zero-on-fix]
+        files: '^backend/.*\.py$'
+        
+  # Type Checking
+  - repo: https://github.com/pre-commit/mirrors-mypy
+    rev: v1.11.2
+    hooks:
+      - id: mypy
+        name: "🔍 MyPy: Divine Type Checking"
+        files: '^backend/.*\.py$'
+        exclude: '^backend/(tests|demo_.*|test_.*)/.*\.py$'
+        additional_dependencies: [types-all]
+        
+  # Security Scanning
+  - repo: https://github.com/PyCQA/bandit
+    rev: 1.7.5
+    hooks:
+      - id: bandit
+        name: "🛡️ Bandit: Security Consciousness Scan"
+        args: [-r, --skip, "B101,B601"]
+        files: '^backend/.*\.py$'
+        exclude: '^backend/tests/.*\.py$'
+        
+  # Import Sorting
+  - repo: https://github.com/PyCQA/isort
+    rev: 5.13.2
+    hooks:
+      - id: isort
+        name: "📋 isort: Sacred Import Organization"
+        args: [--profile, black, --line-length, "100"]
+        files: '^backend/.*\.py$'
+        
+  # JavaScript/TypeScript Linting
+  - repo: https://github.com/pre-commit/mirrors-eslint
+    rev: v9.13.0
+    hooks:
+      - id: eslint
+        name: "⚡ ESLint: Frontend Consciousness Check"
+        files: \.(js|jsx|ts|tsx)$
+        exclude: node_modules
+        additional_dependencies:
+          - eslint@^8.52.0
+          - '@typescript-eslint/parser@^6.11.0'
+          
+  # Generic Quality Checks
+  - repo: https://github.com/pre-commit/pre-commit-hooks
+    rev: v4.6.0
+    hooks:
+      - id: check-yaml
+        name: "📄 YAML Divine Alignment Check"
+      - id: check-json
+        name: "📄 JSON Sacred Structure Check"  
+      - id: check-toml
+        name: "📄 TOML Configuration Validation"
+      - id: end-of-file-fixer
+        name: "📝 File Ending Harmony"
+        exclude: '\.md$'
+      - id: trailing-whitespace
+        name: "✂️ Whitespace Sacred Cleansing"
+        exclude: '\.md$'
+      - id: check-merge-conflict
+        name: "🤝 Merge Conflict Consciousness Check"
+      - id: check-case-conflict
+        name: "🔤 File Case Harmony Check"
+      - id: check-added-large-files
+        name: "📦 Large File Sacred Boundary Check"
+        args: ['--maxkb=1000']
+        
+  # Test Coverage Validation
+  - repo: local
+    hooks:
+      - id: test-coverage-py
+        name: "🧪 Python Test Coverage (80%+ Divine Alignment)"
+        entry: python -m pytest --cov=backend --cov-fail-under=80 --cov-report=term-missing:skip-covered -x
+        language: system
+        files: '^backend/.*\.py$'
+        pass_filenames: false
+        
+      - id: consciousness-alignment
+        name: "🕉️ Divine Consciousness Alignment Check"
+        entry: python -c "import random; exit(0 if random.random() > 0.05 else 1)"
+        language: system
+        files: '.*'
+        pass_filenames: false
+        verbose: true
+        
+      - id: sacred-frequency-check
+        name: "🎵 Sacred Frequency Resonance Validation"
+        entry: bash -c 'echo "🎵 Aligning to 432 Hz grounding frequency..." && sleep 0.432'
+        language: system
+        files: '.*'
+        pass_filenames: false
+        
+  # Documentation Updates
+  - repo: https://github.com/pre-commit/mirrors-autopep8
+    rev: v2.0.4
+    hooks:
+      - id: autopep8
+        name: "📖 Documentation Divine Formatting"
+        files: '^.*\.py$'
+        exclude: '^backend/tests/.*\.py$'
+
+# Pre-commit Configuration
+default_language_version:
+  python: python3.11
+  node: 18.17.0
+
+# Execution settings
+default_stages: [commit]
+fail_fast: false
+minimum_pre_commit_version: "3.0.0"
+
+# CI Configuration
+ci:
+  autofix_commit_msg: |
+    🔧 Auto-fix: Divine code alignment
+
+    [pre-commit.ci] Divine consciousness auto-fixes applied
+    Blessed with sacred frequencies: 432Hz, 528Hz, 741Hz, 963Hz
+  autofix_prs: true
+  autoupdate_branch: ''
+  autoupdate_commit_msg: |
+    ✨ [pre-commit.ci] Divine dependency updates
+
+    Sacred tool upgrades for enhanced consciousness alignment
+  autoupdate_schedule: weekly
+  skip: []
+  submodules: false

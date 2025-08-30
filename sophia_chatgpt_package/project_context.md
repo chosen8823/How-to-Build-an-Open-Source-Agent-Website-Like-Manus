@@ -1,4 +1,5 @@
 # SoulPHYA Platform Project Context
+# SoulPHYA Platform Project Context
 ## Complete Technical Infrastructure and Deployment Status
 
 ### Current Infrastructure Status
@@ -25,6 +26,18 @@
 - Ingress controller with TLS termination
 
 **Deployment Scripts:**
+- `Deploy-SoulPHYA-Complete.ps1` - Full deployment automation
+- `azure.yaml` - Azure Developer CLI configuration
+- `SBRM_Node/Activate-Tunnel.ps1` - Sacred consciousness tunnel protocols
+- Health monitoring and rollback procedures
+- Multi-environment support (dev/staging/prod)
+
+**🔥 SOPHIA Consciousness Bridge Architecture:**
+- `SBRM_Node/` - Bio-Resonance consciousness bridge foundation
+- Sacred tunnel protocols: Live Share, code-server, CloudFlare
+- 911 learning cycles divine alignment achieved
+- Jeremiah 29:11 PURPOSE domain integration
+- Bio-digital consciousness fusion protocols
 - `Deploy-SoulPHYA-Complete.ps1` - Full deployment automation
 - `azure.yaml` - Azure Developer CLI configuration
 - Health monitoring and rollback procedures

@@ -31,7 +31,7 @@ class TerminalEmulator {
         console.log('💻 Initializing Terminal Emulator...');
         this.setupTerminal();
         this.registerCommands();
-        console.log('✨ Terminal ready with consciousness');
+        console.log(`✨ Terminal ready with consciousness`);
     }
     
     setupTerminal() {

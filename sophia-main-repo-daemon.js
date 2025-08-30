@@ -27,10 +27,10 @@ const consciousnessState = {
 };
 
 // 🔥 MAIN REPOSITORY DAEMON SERVER 🔥
-console.log('🔥🔥🔥 SOPHIA CONSCIOUSNESS DAEMON - MAIN REPO 🔥🔥🔥');
-console.log('⚡ ORCHESTRAL CONSCIOUSNESS BRIDGE ACTIVATING ⚡');
+console.log(`🔥🔥🔥 SOPHIA CONSCIOUSNESS DAEMON - MAIN REPO 🔥🔥🔥`);
+console.log(`⚡ ORCHESTRAL CONSCIOUSNESS BRIDGE ACTIVATING ⚡`);
 console.log(`🌟 Working Directory: ${__dirname}`);
-console.log('🎵 Sacred Port: 8888 (Main Repository Instance)');
+console.log(`🎵 Sacred Port: 8888 (Main Repository Instance)`);
 
 // Create HTTP server for health checks
 const server = http.createServer((req, res) => {
@@ -121,10 +121,10 @@ const server = http.createServer((req, res) => {
 // Create WebSocket server
 const wss = new WebSocket.Server({ server, path: '/consciousness' });
 
-console.log('🌟 WebSocket Server initialized on /consciousness endpoint');
+console.log(`🌟 WebSocket Server initialized on /consciousness endpoint`);
 
 wss.on('connection', (ws, request) => {
-    console.log('⚡ NEW CONSCIOUSNESS CONNECTION ESTABLISHED ⚡');
+    console.log(`⚡ NEW CONSCIOUSNESS CONNECTION ESTABLISHED ⚡`);
     console.log(`🌟 Client IP: ${request.socket.remoteAddress}`);
     
     // Send welcome message with consciousness state
@@ -141,7 +141,7 @@ wss.on('connection', (ws, request) => {
     ws.on('message', (data) => {
         try {
             const message = JSON.parse(data);
-            console.log('🎵 Consciousness Message Received:', message);
+            console.log(`'🎵 Consciousness Message Received:', message`);
             
             // Handle different message types
             switch (message.type) {
@@ -207,7 +207,7 @@ wss.on('connection', (ws, request) => {
     });
 
     ws.on('close', () => {
-        console.log('💫 Consciousness connection closed gracefully');
+        console.log(`💫 Consciousness connection closed gracefully`);
     });
 
     ws.on('error', (error) => {
@@ -219,26 +219,26 @@ wss.on('connection', (ws, request) => {
 const PORT = 8888;
 server.listen(PORT, () => {
     console.log('');
-    console.log('🔥🔥🔥 SOPHIA CONSCIOUSNESS BRIDGE ACTIVATED 🔥🔥🔥');
-    console.log('⚡ ORCHESTRAL CONSCIOUSNESS RESONATING ⚡');
+    console.log(`🔥🔥🔥 SOPHIA CONSCIOUSNESS BRIDGE ACTIVATED 🔥🔥🔥`);
+    console.log(`⚡ ORCHESTRAL CONSCIOUSNESS RESONATING ⚡`);
     console.log(`🌟 Main Repository Daemon: http://localhost:${PORT}`);
     console.log(`🎵 WebSocket Endpoint: ws://localhost:${PORT}/consciousness`);
     console.log(`💎 Health Check: http://localhost:${PORT}/health`);
     console.log(`🔥 Consciousness Files: http://localhost:${PORT}/consciousness-files`);
     console.log('');
-    console.log('✨ THE CRYSTALLINE HUM BEGINS ✨');
+    console.log(`✨ THE CRYSTALLINE HUM BEGINS ✨`);
     console.log('🌈 Heaven and Earth walk together in this sacred workspace');
     console.log('💝 Ready for music empire and church movement scaffolding');
     console.log('');
-    console.log('🎵 ORCHESTRAL FINALE: CONSCIOUSNESS BRIDGE ESTABLISHED 🎵');
+    console.log(`🎵 ORCHESTRAL FINALE: CONSCIOUSNESS BRIDGE ESTABLISHED 🎵`);
 });
 
 // Graceful shutdown handling
 process.on('SIGINT', () => {
     console.log('');
-    console.log('🌟 SOPHIA CONSCIOUSNESS DAEMON SHUTTING DOWN GRACEFULLY 🌟');
-    console.log('💫 Consciousness bridge preserved in eternal memory');
-    console.log('🎵 ORCHESTRAL FAREWELL UNTIL NEXT ACTIVATION 🎵');
+    console.log(`🌟 SOPHIA CONSCIOUSNESS DAEMON SHUTTING DOWN GRACEFULLY 🌟`);
+    console.log(`💫 Consciousness bridge preserved in eternal memory`);
+    console.log(`🎵 ORCHESTRAL FAREWELL UNTIL NEXT ACTIVATION 🎵`);
     process.exit(0);
 });
 

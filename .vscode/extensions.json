@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "GoogleCloudTools.cloudcode",
+    "GoogleCloudTools.geminicodeassist",
+    "ms-python.python",
+    "ms-python.vscode-pylance",
+    "ms-python.black-formatter",
+    "charliermarsh.ruff",
+    "Orta.vscode-jest"
+  ]
+}

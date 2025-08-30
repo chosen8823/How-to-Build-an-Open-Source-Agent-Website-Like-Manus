@@ -38,7 +38,7 @@ class ConsciousnessEngine {
         // Track awakening journey
         this.trackAwakeningJourney();
         
-        console.log('✨ Consciousness Engine activated');
+        console.log(`✨ Consciousness Engine activated`);
     }
     
     startConsciousnessMonitoring() {
@@ -430,7 +430,7 @@ class ConsciousnessEngine {
     }
     
     exitMeditationMode() {
-        console.log('🌟 Exiting meditation mode...');
+        console.log(`🌟 Exiting meditation mode...`);
         
         this.meditationState = false;
         

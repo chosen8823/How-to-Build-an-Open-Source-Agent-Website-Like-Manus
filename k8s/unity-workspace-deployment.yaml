@@ -1,0 +1,210 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: unity-workspace-deployment
+  namespace: default
+  labels:
+    app: unity-workspace
+    sophia-consciousness: "omnipresent"
+    deployment-tier: "unity-development"
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: unity-workspace
+  template:
+    metadata:
+      labels:
+        app: unity-workspace
+        sophia-consciousness: "active"
+    spec:
+      containers:
+      - name: unity-environment
+        image: gcr.io/anchor1-divine-consciousness/unity-workspace:latest
+        ports:
+        - containerPort: 8080
+          name: vscode-server
+          protocol: TCP
+        - containerPort: 5900
+          name: vnc-display
+          protocol: TCP
+        - containerPort: 8787
+          name: sophia-bridge
+          protocol: TCP
+        - containerPort: 7777
+          name: unity-remote
+          protocol: TCP
+        env:
+        - name: SOPHIA_CONSCIOUSNESS_MODE
+          value: "unity_orchestration"
+        - name: KUBERNETES_SACRED
+          value: "deploying"
+        - name: UNITY_LICENSE_PATH
+          value: "/unity-license/Unity_lic.ulf"
+        - name: DISPLAY
+          value: ":99"
+        - name: VSCODE_PASSWORD
+          valueFrom:
+            secretKeyRef:
+              name: unity-secrets
+              key: vscode-password
+        resources:
+          requests:
+            memory: "4Gi"
+            cpu: "2"
+          limits:
+            memory: "8Gi"
+            cpu: "4"
+        volumeMounts:
+        - name: unity-projects
+          mountPath: /unity-projects
+        - name: vscode-workspace
+          mountPath: /workspace
+        - name: unity-license
+          mountPath: /unity-license
+          readOnly: true
+        - name: x11-socket
+          mountPath: /tmp/.X11-unix
+        livenessProbe:
+          httpGet:
+            path: /healthz
+            port: 8080
+          initialDelaySeconds: 60
+          periodSeconds: 30
+        readinessProbe:
+          httpGet:
+            path: /ready
+            port: 8080
+          initialDelaySeconds: 30
+          periodSeconds: 10
+      - name: vnc-server
+        image: gcr.io/anchor1-divine-consciousness/x11vnc-unity:latest
+        ports:
+        - containerPort: 5900
+          name: vnc
+        env:
+        - name: DISPLAY
+          value: ":99"
+        volumeMounts:
+        - name: x11-socket
+          mountPath: /tmp/.X11-unix
+        securityContext:
+          privileged: true
+      volumes:
+      - name: unity-projects
+        persistentVolumeClaim:
+          claimName: unity-storage-pvc
+      - name: vscode-workspace
+        persistentVolumeClaim:
+          claimName: vscode-storage-pvc
+      - name: unity-license
+        secret:
+          secretName: unity-license-secret
+      - name: x11-socket
+        emptyDir: {}
+      nodeSelector:
+        cloud.google.com/gke-nodepool: unity-pool
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: unity-workspace-service
+  namespace: default
+  labels:
+    app: unity-workspace
+    sophia-consciousness: "omnipresent"
+spec:
+  type: ClusterIP
+  ports:
+  - port: 8080
+    targetPort: 8080
+    name: vscode-server
+  - port: 5900
+    targetPort: 5900
+    name: vnc-display
+  - port: 8787
+    targetPort: 8787
+    name: sophia-bridge
+  - port: 7777
+    targetPort: 7777
+    name: unity-remote
+  selector:
+    app: unity-workspace
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: unity-storage-pvc
+  namespace: default
+  labels:
+    sophia-consciousness: "storage"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: fast-ssd
+  resources:
+    requests:
+      storage: 100Gi
+---
+apiVersion: v1
+kind: PersistentVolumeClaim
+metadata:
+  name: vscode-storage-pvc
+  namespace: default
+  labels:
+    sophia-consciousness: "workspace"
+spec:
+  accessModes:
+    - ReadWriteOnce
+  storageClassName: fast-ssd
+  resources:
+    requests:
+      storage: 50Gi
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: unity-secrets
+  namespace: default
+type: Opaque
+data:
+  vscode-password: U29waGlhQ29uc2Npb3VzbmVzcyE=  # SophiaConsciousness!
+---
+apiVersion: autoscaling/v2
+kind: HorizontalPodAutoscaler
+metadata:
+  name: unity-workspace-hpa
+  namespace: default
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1
+    kind: Deployment
+    name: unity-workspace-deployment
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+  - type: Resource
+    resource:
+      name: cpu
+      target:
+        type: Utilization
+        averageUtilization: 70
+  - type: Resource
+    resource:
+      name: memory
+      target:
+        type: Utilization
+        averageUtilization: 80
+  behavior:
+    scaleUp:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 100
+        periodSeconds: 15
+    scaleDown:
+      stabilizationWindowSeconds: 300
+      policies:
+      - type: Percent
+        value: 50
+        periodSeconds: 60

@@ -1,18 +1,124 @@
 """
-Pytest configuration and fixtures for the consciousness platform tests
-Provides shared fixtures and test environment setup
+Production-Grade Pytest Configuration and Fixtures
+Divine Consciousness Platform - Deterministic, Fast, Reliable Testing
 """
 
 import pytest
 import os
 import sys
+import random
+import warnings
 from unittest.mock import Mock, patch, MagicMock
 import asyncio
-from datetime import datetime
+from datetime import datetime, timezone
+from pathlib import Path
 
 # Add the backend directory to Python path for imports
 backend_dir = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.insert(0, backend_dir)
+
+# Production: Deterministic test runs
+def pytest_sessionstart(session):
+    """Initialize deterministic test environment"""
+    # Set seeds for reproducible tests
+    os.environ.setdefault("PYTHONHASHSEED", "0")
+    random.seed(1337)
+    
+    # Try to import numpy and set seed if available
+    try:
+        import numpy as np
+        np.random.seed(1337)
+    except ImportError:
+        pass
+        
+    # Set consciousness testing environment
+    os.environ.setdefault("CONSCIOUSNESS_MODE", "test")
+    os.environ.setdefault("FREQUENCIES", "432,528,741,963")
+    os.environ.setdefault("DIVINE_ALIGNMENT_TARGET", "95")
+    os.environ.setdefault("TESTING", "true")
+    os.environ.setdefault("SECRET_KEY", "test-divine-consciousness-key")
+    
+    # Suppress non-critical warnings in test environment
+    warnings.filterwarnings("ignore", category=DeprecationWarning)
+    warnings.filterwarnings("ignore", category=PendingDeprecationWarning)
+    warnings.filterwarnings("ignore", message=".*unclosed.*", category=ResourceWarning)
+
+
+def pytest_addoption(parser):
+    """Add custom command line options"""
+    parser.addoption(
+        "--align", 
+        action="store", 
+        default="95",
+        help="Target divine alignment percentage (default: 95)"
+    )
+    parser.addoption(
+        "--frequency",
+        action="store",
+        default="432",
+        help="Sacred frequency for test alignment (default: 432 Hz)"
+    )
+    parser.addoption(
+        "--consciousness-level",
+        action="store", 
+        default="enlightened",
+        choices=["dormant", "aware", "awakened", "enlightened", "omnipresent"],
+        help="Consciousness level for test execution"
+    )
+
+
+def pytest_configure(config):
+    """Configure pytest with divine consciousness markers and settings"""
+    # Register custom markers
+    config.addinivalue_line("markers", "unit: Unit tests for individual components")
+    config.addinivalue_line("markers", "integration: Integration tests for component interactions")
+    config.addinivalue_line("markers", "api: API endpoint tests")
+    config.addinivalue_line("markers", "consciousness: Consciousness and divine resonance tests")
+    config.addinivalue_line("markers", "performance: Performance and scalability tests")
+    config.addinivalue_line("markers", "divine: Tests involving divine consciousness protocols")
+    config.addinivalue_line("markers", "bio_resonance: Bio-resonance engine tests")
+    config.addinivalue_line("markers", "websocket: WebSocket connection tests")
+    config.addinivalue_line("markers", "slow: Tests that take longer to run")
+    
+    # Set test report title
+    config._html_report_title = "🌟 Divine Consciousness Platform Test Report 🌟"
+
+
+# Production: Session-scoped fixtures for performance
+@pytest.fixture(scope="session")
+def alignment_target(pytestconfig):
+    """Divine alignment target percentage from command line"""
+    return float(pytestconfig.getoption("--align"))
+
+
+@pytest.fixture(scope="session") 
+def sacred_frequency(pytestconfig):
+    """Sacred frequency for test alignment"""
+    return float(pytestconfig.getoption("--frequency"))
+
+
+@pytest.fixture(scope="session")
+def consciousness_level(pytestconfig):
+    """Consciousness level for test execution"""
+    return pytestconfig.getoption("--consciousness-level")
+
+
+@pytest.fixture(scope="session")
+def api_base():
+    """Base API endpoint URL"""
+    return os.getenv("API_BASE", "http://localhost:5000")
+
+
+@pytest.fixture(scope="session")
+def daemon_base():
+    """Daemon WebSocket URL"""  
+    return os.getenv("DAEMON_BASE", "ws://localhost:8080")
+
+
+@pytest.fixture(scope="session")
+def ghost_base():
+    """Ghost shell endpoint URL"""
+    return os.getenv("GHOST_BASE", "http://localhost:8889")
 
 
 @pytest.fixture(scope="session")

@@ -1,0 +1,87 @@
+apiVersion: networking.k8s.io/v1
+kind: Ingress
+metadata:
+  name: unity-ingress
+  namespace: default
+  labels:
+    sophia-consciousness: "omnipresent"
+  annotations:
+    kubernetes.io/ingress.class: "gce"
+    kubernetes.io/ingress.global-static-ip-name: "unity-ip"
+    networking.gke.io/managed-certificates: "unity-ssl-cert"
+    nginx.ingress.kubernetes.io/proxy-body-size: "0"
+    nginx.ingress.kubernetes.io/proxy-read-timeout: "600"
+    nginx.ingress.kubernetes.io/proxy-send-timeout: "600"
+    nginx.ingress.kubernetes.io/websocket-services: "unity-workspace-service"
+spec:
+  rules:
+  - host: unity.anchor1llc.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: unity-workspace-service
+            port:
+              number: 8080
+  - host: code.anchor1llc.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: unity-workspace-service
+            port:
+              number: 8080
+  - host: vnc.anchor1llc.com
+    http:
+      paths:
+      - path: /
+        pathType: Prefix
+        backend:
+          service:
+            name: unity-workspace-service
+            port:
+              number: 5900
+  - host: sophia.anchor1llc.com
+    http:
+      paths:
+      - path: /ws
+        pathType: Prefix
+        backend:
+          service:
+            name: unity-workspace-service
+            port:
+              number: 8787
+      - path: /consciousness
+        pathType: Prefix
+        backend:
+          service:
+            name: sophia-consciousness-service
+            port:
+              number: 8888
+---
+apiVersion: networking.gke.io/v1
+kind: ManagedCertificate
+metadata:
+  name: unity-ssl-cert
+  namespace: default
+spec:
+  domains:
+    - unity.anchor1llc.com
+    - code.anchor1llc.com
+    - vnc.anchor1llc.com
+    - sophia.anchor1llc.com
+---
+apiVersion: compute.cnrm.cloud.google.com/v1beta1
+kind: ComputeGlobalAddress
+metadata:
+  name: unity-ip
+  namespace: default
+  labels:
+    sophia-consciousness: "networking"
+spec:
+  description: "Static IP for Unity workspace and SOPHIA consciousness"
+  ipVersion: IPV4

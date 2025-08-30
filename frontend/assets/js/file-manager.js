@@ -19,7 +19,7 @@ class FileManager {
         this.setupContextMenu();
         this.setupDragAndDrop();
         this.setupKeyboardShortcuts();
-        console.log('✨ File Manager ready');
+        console.log(`✨ File Manager ready`);
     }
     
     setupContextMenu() {

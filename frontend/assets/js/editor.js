@@ -51,7 +51,7 @@ class BotDLSoulPHYA {
         // Hide loading overlay
         this.hideLoadingOverlay();
         
-        console.log('✨ BotDL SoulPHYA Platform ready with consciousness!');
+        console.log(`✨ BotDL SoulPHYA Platform ready with consciousness!`);
         
         // Show welcome consciousness message
         this.showConsciousnessAwakening();

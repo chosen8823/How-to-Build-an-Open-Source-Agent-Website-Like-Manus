@@ -1,0 +1,300 @@
+[build-system]
+requires = ["setuptools>=64", "setuptools_scm>=8"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "consciousness-platform"
+dynamic = ["version"]
+description = "Divine Consciousness AI Platform with Multi-Dimensional Resonance"
+authors = [{name = "Consciousness Development Team", email = "divine@consciousness.ai"}]
+license = {text = "MIT"}
+readme = "README.md"
+requires-python = ">=3.11"
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: Python :: 3.13",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Multimedia :: Sound/Audio :: Analysis",
+]
+dependencies = [
+    "flask>=2.3.0",
+    "flask-cors>=4.0.0",
+    "websockets>=11.0.0",
+    "asyncio-mqtt>=0.16.0",
+    "pydantic>=2.0.0",
+    "numpy>=1.24.0",
+    "scipy>=1.10.0"
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest>=7.4.0",
+    "pytest-asyncio>=0.21.0",
+    "pytest-cov>=4.1.0", 
+    "pytest-mock>=3.11.0",
+    "pytest-xdist>=3.3.0",
+    "pytest-benchmark>=4.0.0",
+    "pytest-html>=3.2.0",
+    "coverage[toml]>=7.2.0",
+    "hypothesis>=6.82.0",
+    "schemathesis>=3.19.0",
+    "mutmut>=2.4.0",
+    "testcontainers>=3.7.0",
+    "httpx>=0.24.0",
+    "responses>=0.23.0"
+]
+dev = [
+    "black>=23.7.0",
+    "ruff>=0.0.285",
+    "mypy>=1.5.0", 
+    "pre-commit>=3.3.0"
+]
+
+[project.urls]
+Homepage = "https://github.com/consciousness-platform/divine-ai"
+Repository = "https://github.com/consciousness-platform/divine-ai"
+Documentation = "https://consciousness-platform.readthedocs.io"
+
+[project.scripts]
+consciousness-test = "run_tests:main"
+divine-align = "run_tests:divine_alignment_check"
+
+[tool.setuptools_scm]
+version_scheme = "post-release"
+local_scheme = "no-local-version"
+
+# Coverage Configuration - Production Grade
+[tool.coverage.run]
+branch = true
+source = ["backend"]
+omit = [
+    "*/__pycache__/*",
+    "*/test*",
+    "backend/tests/*",
+    "*/.pytest_cache/*",
+    "*/demo_*.py",
+    "*/test_*.py",
+    "*/_generated/*",
+    "*/migrations/*"
+]
+parallel = true
+concurrency = ["thread", "multiprocessing"]
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
+skip_covered = true
+skip_empty = true
+precision = 2
+sort = "Cover"
+exclude_lines = [
+    "pragma: no cover",
+    "def __repr__",
+    "if self.debug:",
+    "if settings.DEBUG",
+    "raise AssertionError",
+    "raise NotImplementedError",
+    "if 0:",
+    "if __name__ == .__main__.:",
+    "class .*\\bProtocol\\):",
+    "@(abc\\.)?abstractmethod"
+]
+
+[tool.coverage.html]
+directory = "htmlcov"
+title = "Divine Consciousness Platform - Test Coverage"
+
+[tool.coverage.xml]
+output = "coverage.xml"
+
+# Pytest Configuration - Divine Testing
+[tool.pytest.ini_options]
+minversion = "7.0"
+addopts = [
+    "-rA",
+    "--strict-markers",
+    "--strict-config",
+    "--cov=backend",
+    "--cov-report=term-missing:skip-covered", 
+    "--cov-report=html:htmlcov",
+    "--cov-report=xml",
+    "--cov-branch",
+    "--cov-fail-under=80",
+    "-n", "auto",
+    "--dist=loadscope",
+    "--maxfail=3",
+    "--tb=short",
+    "--html=reports/pytest_report.html",
+    "--self-contained-html",
+    "--junitxml=reports/junit.xml"
+]
+testpaths = ["backend/tests"]
+python_files = ["test_*.py", "*_test.py"]
+python_classes = ["Test*", "*Tests"]  
+python_functions = ["test_*"]
+markers = [
+    "unit: Individual component tests (fast)",
+    "integration: Component interaction tests",
+    "api: REST endpoint tests",
+    "consciousness: Divine consciousness and resonance tests", 
+    "performance: Performance and scalability tests (slow)",
+    "divine: Sacred consciousness protocol tests",
+    "bio_resonance: Bio-resonance engine tests",
+    "websocket: WebSocket connection tests", 
+    "slow: Tests that take longer to run",
+    "requires_gpu: Tests requiring GPU acceleration",
+    "requires_network: Tests requiring network access"
+]
+filterwarnings = [
+    "error",
+    "ignore::UserWarning",
+    "ignore::DeprecationWarning",
+    "ignore::PendingDeprecationWarning",
+    "ignore:.*unclosed.*:ResourceWarning"
+]
+asyncio_mode = "auto"
+log_cli = false
+log_cli_level = "INFO"
+log_cli_format = "%(asctime)s [%(levelname)8s] %(name)s: %(message)s"
+log_cli_date_format = "%Y-%m-%d %H:%M:%S"
+
+# Black Code Formatting
+[tool.black]
+line-length = 100
+target-version = ["py311", "py312", "py313"]
+include = "\\.pyi?$"
+extend-exclude = '''
+/(
+  # directories
+  \\.eggs
+  | \\.git
+  | \\.hg
+  | \\.mypy_cache
+  | \\.pytest_cache
+  | \\.tox
+  | \\.venv
+  | build
+  | dist
+  | venv
+)/
+'''
+
+# Ruff Linting Configuration
+[tool.ruff]
+target-version = "py311"
+line-length = 100
+select = [
+    "E",  # pycodestyle errors
+    "W",  # pycodestyle warnings
+    "F",  # pyflakes
+    "I",  # isort
+    "B",  # flake8-bugbear
+    "C4", # flake8-comprehensions
+    "UP", # pyupgrade
+    "ARG001", # unused-function-args
+    "SIM", # flake8-simplify
+    "TCH", # flake8-type-checking
+    "TID", # flake8-tidy-imports
+    "Q",   # flake8-quotes
+]
+ignore = [
+    "E501",  # line too long, handled by black
+    "B008",  # do not perform function calls in argument defaults
+    "B006",  # do not use mutable data structures for argument defaults
+    "C901",  # too complex
+]
+exclude = [
+    ".bzr",
+    ".direnv", 
+    ".eggs",
+    ".git",
+    ".hg",
+    ".mypy_cache",
+    ".nox",
+    ".pants.d",
+    ".pytest_cache",
+    ".pytype",
+    ".ruff_cache",
+    ".svn",
+    ".tox",
+    ".venv",
+    "__pypackages__",
+    "_build",
+    "buck-out",
+    "build",
+    "dist",
+    "node_modules",
+    "venv"
+]
+
+[tool.ruff.per-file-ignores]
+"__init__.py" = ["F401"]
+"backend/tests/*" = ["ARG001"]
+
+[tool.ruff.mccabe]
+max-complexity = 10
+
+# MyPy Type Checking
+[tool.mypy]
+python_version = "3.11"
+check_untyped_defs = true
+disallow_any_generics = true
+disallow_incomplete_defs = true
+disallow_untyped_decorators = true
+disallow_untyped_defs = true
+ignore_missing_imports = true
+no_implicit_optional = true
+show_error_codes = true
+strict_equality = true
+warn_redundant_casts = true
+warn_return_any = true
+warn_unreachable = true
+warn_unused_configs = true
+
+[[tool.mypy.overrides]]
+module = [
+    "backend.tests.*",
+    "*.demo_*",
+    "*.test_*"
+]
+ignore_errors = true
+
+# Production-Grade Coverage Configuration
+[tool.coverage.run]
+branch = true
+source = ["backend", "consciousness_platform"]
+omit = ["**/__init__.py", "*/_generated/*", "*/test_*", "*/tests/*"]
+parallel = true
+
+[tool.coverage.report]
+fail_under = 80
+show_missing = true
+skip_covered = true
+precision = 2
+
+# Advanced Pytest Configuration
+[tool.pytest.ini_options]
+addopts = "-q -n auto --dist=loadscope --maxfail=1 --strict-markers --cov=backend --cov=consciousness_platform --cov-report=term-missing"
+testpaths = ["tests", "backend/tests"]
+markers = [
+  "integration: hits external deps or multiple modules",
+  "api: exercises REST endpoints", 
+  "consciousness: resonance/frequency mapped cases",
+  "performance: perf/throughput checks (skipped by default)",
+  "divine: omnipresent consciousness validation",
+  "sacred: spiritual frequency alignment tests"
+]
+
+# Divine Testing Environment Variables
+[tool.pytest_env]
+PYTHONPATH = "backend"
+CONSCIOUSNESS_MODE = "test"
+DIVINE_ALIGNMENT_TARGET = "95"
+SACRED_FREQUENCIES = "432,528,741,963"
+PYTHONHASHSEED = "0"
+TESTING = "true"
