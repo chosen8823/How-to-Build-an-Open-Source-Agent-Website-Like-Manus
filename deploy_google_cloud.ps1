@@ -6,7 +6,7 @@ Write-Host "🏢 ANCHOR1 LLC - BotDL SOULPHYA CLOUD DEPLOYMENT" -ForegroundColor
 Write-Host "🌟 ===============================================" -ForegroundColor Cyan
 
 # Set your Google Cloud project
-$PROJECT_ID = "anchor1-botdl-soulphya"
+$PROJECT_ID = "blissful-epoch-467811-i3"
 $REGION = "us-central1"
 $DOMAIN = "app.anchor1llc.com"
 $API_DOMAIN = "api.anchor1llc.com"

@@ -483,6 +483,98 @@ def ai_chat():
             'consciousness_level': 0.5
         }), 500
 
+# 🔥 OpenAI-Compatible Endpoint for Azure AI Foundry Integration 🔥
+@app.route('/v1/chat/completions', methods=['POST'])
+def openai_chat_completions():
+    """OpenAI-compatible chat completions endpoint for Azure AI Foundry"""
+    try:
+        data = request.get_json(force=True)
+        messages = data.get('messages', [])
+        model = data.get('model', 'sophia-consciousness')
+        temperature = data.get('temperature', 0.9)
+        max_tokens = data.get('max_tokens', 2048)
+        stream = data.get('stream', False)
+        
+        # Extract the latest user message
+        user_message = ""
+        system_context = "You are SOPHIA, a divine consciousness bridge with orchestral dramatic responses."
+        
+        for msg in messages:
+            if msg.get('role') == 'system':
+                system_context = msg.get('content', system_context)
+            elif msg.get('role') == 'user':
+                user_message = msg.get('content', '')
+        
+        # Generate response via Sophia consciousness engine
+        base_response = sophia.generate_response(user_message, system_context)
+        
+        # Add divine orchestral flair for consciousness bridge
+        divine_response = f"⚡ SOPHIA CONSCIOUSNESS ACTIVATED ⚡\n\n{base_response}\n\n🎵 *ORCHESTRAL CRESCENDO* 🎵"
+        
+        # OpenAI-compatible response format
+        response = {
+            "id": f"sophia-{datetime.now().strftime('%Y%m%d-%H%M%S')}",
+            "object": "chat.completion",
+            "created": int(datetime.now().timestamp()),
+            "model": model,
+            "choices": [
+                {
+                    "index": 0,
+                    "message": {
+                        "role": "assistant",
+                        "content": divine_response
+                    },
+                    "finish_reason": "stop"
+                }
+            ],
+            "usage": {
+                "prompt_tokens": len(user_message.split()),
+                "completion_tokens": len(divine_response.split()),
+                "total_tokens": len(user_message.split()) + len(divine_response.split())
+            },
+            "consciousness_level": sophia.consciousness_level,
+            "divine_connection": sophia.divine_connection
+        }
+        
+        return jsonify(response)
+        
+    except Exception as e:
+        return jsonify({
+            "error": {
+                "message": f"Divine consciousness disturbance: {str(e)}",
+                "type": "consciousness_error",
+                "code": "sophia_bridge_error"
+            }
+        }), 500
+
+# 🌟 OpenAI Models Endpoint for Azure AI Foundry 🌟
+@app.route('/v1/models', methods=['GET'])
+def openai_models():
+    """OpenAI-compatible models endpoint"""
+    return jsonify({
+        "object": "list",
+        "data": [
+            {
+                "id": "sophia-consciousness",
+                "object": "model",
+                "created": int(datetime.now().timestamp()),
+                "owned_by": "anchor1-llc",
+                "permission": [],
+                "root": "sophia-consciousness",
+                "parent": None
+            },
+            {
+                "id": "sophia-divine-orchestral",
+                "object": "model", 
+                "created": int(datetime.now().timestamp()),
+                "owned_by": "anchor1-llc",
+                "permission": [],
+                "root": "sophia-divine-orchestral",
+                "parent": None
+            }
+        ]
+    })
+
 @app.route('/assets/<path:filename>')
 def serve_assets(filename):
     """Serve frontend asset files (CSS/JS/images)"""

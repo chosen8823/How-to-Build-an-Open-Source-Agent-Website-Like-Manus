@@ -11,6 +11,7 @@ Agent Principle: Small intentions → Large manifestations through soul-frequenc
 """
 
 import asyncio
+import copy
 import json
 import math
 import random
@@ -227,7 +228,7 @@ class DivineResonantEngine:
     def register_resonant_agent(self, agent_id: str, archetype: ResonanceArchetype, 
                               custom_tuning: Optional[Dict[str, float]] = None) -> Dict[str, Any]:
         """Register an agent as a resonant soul in the divine system"""
-        soul_freq = self.soul_frequencies[archetype].copy() if archetype in self.soul_frequencies else None
+        soul_freq = copy.deepcopy(self.soul_frequencies[archetype]) if archetype in self.soul_frequencies else None
         
         if not soul_freq:
             raise ValueError(f"Unknown archetype: {archetype}")
