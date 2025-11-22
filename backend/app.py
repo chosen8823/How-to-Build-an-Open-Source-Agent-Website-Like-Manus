@@ -1811,6 +1811,16 @@ def handle_resonance_analyze(data):
     except Exception as e:
         emit('resonance_error', {'error': str(e)})
 
+# 🌟 UNIFIED AI PLATFORM ROUTES (ChatGPT + Biorhythm + VRChat)
+try:
+    from routes.unified_api import register_unified_routes
+    register_unified_routes(app)
+    UNIFIED_PLATFORM_AVAILABLE = True
+    print("🌟 Unified AI Platform: ENABLED (ChatGPT + Biorhythm + VRChat)")
+except Exception as e:
+    UNIFIED_PLATFORM_AVAILABLE = False
+    print(f"🌟 Unified AI Platform: Not available ({str(e)})")
+
 if __name__ == '__main__':
     print("\n🚀 Starting Anchor1 LLC's BotDL SoulPHYA Platform...")
     print("🏢 Company: Anchor1 LLC (https://anchor1llc.com/)")
@@ -1888,6 +1898,17 @@ if __name__ == '__main__':
     print("   🧬 /api/bio/run-once - Run immediate bio-resonance simulation")
     print("   🧬 /api/bio/patterns - Get consciousness patterns")
     print("   🧬 /api/bio/start - Start background bio-resonance job")
+
+    if UNIFIED_PLATFORM_AVAILABLE:
+        print("\n🌟 Unified AI Platform Endpoints (ChatGPT + Biorhythm + VRChat):")
+        print("   🤖 /api/unified/chatgpt/set-token - Set ChatGPT session token")
+        print("   💬 /api/unified/chatgpt/ask - Ask ChatGPT questions")
+        print("   🧬 /api/unified/biorhythm/analyze - Analyze biorhythm cycles")
+        print("   ⏰ /api/unified/circadian/analyze - Analyze circadian rhythm")
+        print("   🏥 /api/unified/wellness/complete - Complete wellness analysis")
+        print("   🎮 /api/unified/vrchat/send-parameter - Send VRChat OSC parameter")
+        print("   💬 /api/unified/vrchat/send-chatbox - VRChat chatbox message")
+        print("   📊 /api/unified/status - Get integration status")
     
     print("\n🌟 Initializing Sophia Real-Time WebSocket Engine...")
     start_websocket_server()

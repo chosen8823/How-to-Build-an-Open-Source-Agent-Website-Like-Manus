@@ -88,3 +88,12 @@ flake8==6.1.0
 
 # Legacy dependencies (maintaining compatibility)
 openai==1.3.0
+
+# ChatGPT Web Integration (Session-based)
+undetected-chromedriver==3.5.5
+selenium==4.15.2
+python-osc==1.8.3
+
+# Biorhythm & Time Series Analysis
+sktime==0.25.0
+statsmodels==0.14.1
