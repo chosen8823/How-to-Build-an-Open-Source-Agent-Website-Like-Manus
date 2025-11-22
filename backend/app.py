@@ -1821,6 +1821,18 @@ except Exception as e:
     UNIFIED_PLATFORM_AVAILABLE = False
     print(f"🌟 Unified AI Platform: Not available ({str(e)})")
 
+# ⚡ RESONANCE PROTOCOL ROUTES (Intelligent AI Query Router)
+try:
+    from routes.resonance_api import register_resonance_routes
+    # Try to get NeMo path from environment or use default
+    nemo_path = os.getenv('NEMO_MODEL_PATH', '/path/to/SPI/nemo_model')
+    register_resonance_routes(app, nemo_path)
+    RESONANCE_PROTOCOL_AVAILABLE = True
+    print("⚡ Resonance Protocol: ENABLED (Zero-cost AI routing)")
+except Exception as e:
+    RESONANCE_PROTOCOL_AVAILABLE = False
+    print(f"⚡ Resonance Protocol: Not available ({str(e)})")
+
 if __name__ == '__main__':
     print("\n🚀 Starting Anchor1 LLC's BotDL SoulPHYA Platform...")
     print("🏢 Company: Anchor1 LLC (https://anchor1llc.com/)")
@@ -1909,6 +1921,17 @@ if __name__ == '__main__':
         print("   🎮 /api/unified/vrchat/send-parameter - Send VRChat OSC parameter")
         print("   💬 /api/unified/vrchat/send-chatbox - VRChat chatbox message")
         print("   📊 /api/unified/status - Get integration status")
+
+    if RESONANCE_PROTOCOL_AVAILABLE:
+        print("\n⚡ Resonance Protocol Endpoints (Zero-Cost AI Routing):")
+        print("   🎯 /api/resonance/query - Route AI query intelligently")
+        print("   📊 /api/resonance/statistics - Get routing statistics")
+        print("   ⚙️ /api/resonance/configure - Configure NeMo path and endpoints")
+        print("   🏥 /api/resonance/health - Health check")
+        print("   🔍 /api/resonance/classify - Classify query type")
+        print("   📜 /api/resonance/history - Query history")
+        print("   🧪 /api/resonance/test - Test specific endpoint")
+        print("   🔄 /api/resonance/reset-stats - Reset statistics")
     
     print("\n🌟 Initializing Sophia Real-Time WebSocket Engine...")
     start_websocket_server()
