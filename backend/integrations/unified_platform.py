@@ -235,6 +235,16 @@ Provide:
             # 4. Get comprehensive AI analysis from ChatGPT
             ai_comprehensive_analysis = None
             if self.chatgpt.access_token:
+                # Build sleep analysis section
+                sleep_section = ""
+                if sleep_analysis:
+                    sleep_section = f"""SLEEP ANALYSIS:
+- Avg Hours: {sleep_analysis['average_sleep_hours']}
+- Quality: {sleep_analysis['average_quality']:.1%}
+- Sleep Debt: {sleep_analysis['sleep_debt_hours']} hours
+
+"""
+
                 wellness_summary = f"""Provide a comprehensive wellness analysis based on this data:
 
 BIORHYTHM:
@@ -247,9 +257,7 @@ CIRCADIAN RHYTHM:
 - Energy Level: {circadian_result['circadian']['energy_level']:.1%}
 - Neural State: {circadian_result['circadian']['neural_state']}
 
-{f"SLEEP ANALYSIS:\n- Avg Hours: {sleep_analysis['average_sleep_hours']}\n- Quality: {sleep_analysis['average_quality']:.1%}\n- Sleep Debt: {sleep_analysis['sleep_debt_hours']} hours" if sleep_analysis else ""}
-
-Provide:
+{sleep_section}Provide:
 1. Overall wellness assessment
 2. Top 3 personalized recommendations
 3. Optimal schedule for today
