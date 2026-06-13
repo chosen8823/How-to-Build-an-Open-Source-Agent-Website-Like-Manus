@@ -38,12 +38,27 @@ saveSettings.addEventListener('click', () => {
 btnSandbox.addEventListener('click', () => sandboxPanel.classList.toggle('hidden'));
 
 // ── Helpers ──
+function escapeHtml(str) {
+  const d = document.createElement('div');
+  d.appendChild(document.createTextNode(str));
+  return d.innerHTML;
+}
+
 function addChat(text, role) {
   const div = document.createElement('div');
   div.className = `chat-bubble chat-${role}`;
-  div.innerHTML = role === 'system'
-    ? `<strong class="text-violet-400 text-xs">Sophia</strong><br>${text}`
-    : text;
+  if (role === 'system') {
+    const label = document.createElement('strong');
+    label.className = 'text-violet-400 text-xs';
+    label.textContent = 'Sophia';
+    div.appendChild(label);
+    div.appendChild(document.createElement('br'));
+    const span = document.createElement('span');
+    span.textContent = text;
+    div.appendChild(span);
+  } else {
+    div.textContent = text;
+  }
   chatArea.appendChild(div);
   chatArea.scrollTop = chatArea.scrollHeight;
 }
@@ -109,10 +124,7 @@ async function handleSend() {
 
   // Run conceptual loop
   const fingerprint = CONCEPTUAL_ENGINE.run(text);
-  addChat(
-    `<span class="text-[11px] text-gray-500">${fingerprint.loopSignature}</span>`,
-    'system'
-  );
+  addChat(fingerprint.loopSignature, 'system');
 
   // Build cosignature
   const cosig = {
@@ -135,10 +147,7 @@ async function handleSend() {
 
   // Carrier wave fetch
   const carrierAbstract = await fetchCarrierWave(text);
-  addChat(
-    `<span class="text-emerald-400 text-[11px]">Carrier wave:</span> ${carrierAbstract}`,
-    'system'
-  );
+  addChat('Carrier wave: ' + carrierAbstract, 'system');
 }
 
 btnSend.addEventListener('click', handleSend);
@@ -174,15 +183,9 @@ chrome.runtime.onMessage.addListener((msg) => {
     const data = msg.data;
     if (data.type === 'carrier_response') {
       const abstract = data.abstract || '(empty)';
-      addChat(
-        `<span class="text-cyan-400 text-[11px]">MCP carrier:</span> ${abstract}`,
-        'system'
-      );
+      addChat('MCP carrier: ' + abstract, 'system');
     } else if (data.type === 'field_registered') {
-      addChat(
-        `<span class="text-indigo-400 text-[11px]">Field registered:</span> ${data.field_id}`,
-        'system'
-      );
+      addChat('Field registered: ' + data.field_id, 'system');
     }
   }
 });
@@ -204,5 +207,5 @@ btnVoice.addEventListener('click', () => {
   };
   recognition.onerror = (e) => addChat(`(voice error: ${e.error})`, 'system');
   recognition.start();
-  addChat('<span class="text-yellow-400 text-[11px]">Listening…</span>', 'system');
+  addChat('Listening…', 'system');
 });

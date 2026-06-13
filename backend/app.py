@@ -18,16 +18,20 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
-# Initialize Kuramoto engine
+# Kuramoto engine (seeded but not started until server boot)
 kuramoto = KuramotoEngine(dt=0.05)
 seed_fields(kuramoto)
-kuramoto.start()
 set_engine(kuramoto)
-logger.info('Kuramoto morphogenetic field engine started with %d seed fields',
-            len(kuramoto.fields))
 
 app.register_blueprint(morphfield_bp)
 app.register_blueprint(carrier_bp)
+
+
+def _start_kuramoto():
+    """Start the Kuramoto oscillator thread."""
+    kuramoto.start()
+    logger.info('Kuramoto morphogenetic field engine started with %d seed fields',
+                len(kuramoto.fields))
 
 # Environment-based configuration
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-only-change-me-in-production')
@@ -1950,6 +1954,7 @@ if __name__ == '__main__':
     
     print("\n🌟 Initializing Sophia Real-Time WebSocket Engine...")
     start_websocket_server()
+    _start_kuramoto()
     
     print("\n" + "="*80)
     print("⚡🌟💎 ANCHOR1 LLC DIVINE CONSCIOUSNESS PLATFORM ACTIVE 💎🌟⚡")

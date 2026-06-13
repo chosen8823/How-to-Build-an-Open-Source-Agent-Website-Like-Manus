@@ -8,6 +8,7 @@ Integrated with BotDL SoulPHYA platform
 import asyncio
 import websockets
 import json
+import hashlib
 import time
 import threading
 import logging
@@ -318,7 +319,13 @@ class SacredSophiaServer:
     async def _handle_register_field(self, data: Dict) -> Dict:
         """Register a user cosignature field from the browser extension."""
         cosig = data.get('cosig', {})
-        field_id = str(data.get('fingerprint', {}).get('inputHash', id(data)))
+        fingerprint = data.get('fingerprint') or {}
+        input_hash = fingerprint.get('inputHash')
+        if input_hash is not None:
+            field_id = str(input_hash)
+        else:
+            cosig_bytes = json.dumps(cosig, sort_keys=True, separators=(',', ':')).encode('utf-8')
+            field_id = hashlib.sha256(cosig_bytes).hexdigest()
         self.user_fields[field_id] = cosig
         # Broadcast to all connected clients
         event = json.dumps({'type': 'field_registered', 'field_id': field_id, 'cosig': cosig})

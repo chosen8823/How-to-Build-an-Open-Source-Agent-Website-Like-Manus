@@ -19,7 +19,7 @@ let fieldState = { fields: [], couplings: [] };
 function resize() {
   canvas.width  = canvas.clientWidth  * devicePixelRatio;
   canvas.height = canvas.clientHeight * devicePixelRatio;
-  ctx.scale(devicePixelRatio, devicePixelRatio);
+  ctx.setTransform(devicePixelRatio, 0, 0, devicePixelRatio, 0, 0);
 }
 resize();
 window.addEventListener('resize', resize);

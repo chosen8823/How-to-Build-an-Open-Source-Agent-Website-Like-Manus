@@ -1,12 +1,32 @@
 /* SoulPHYA Field — Background Service Worker
-   Maintains persistent WebSocket to MCP server at ws://localhost:8765 */
+   Maintains persistent WebSocket to MCP server. */
 
 let ws = null;
 let pending = [];
+let wsUrl = 'ws://localhost:8765';
+
+// Load configured WebSocket URL from storage
+chrome.storage.local.get(['soulphya_settings'], (r) => {
+  if (r.soulphya_settings && r.soulphya_settings.wsUrl) {
+    wsUrl = r.soulphya_settings.wsUrl;
+  }
+  connect();
+});
+
+// React to runtime settings changes
+chrome.storage.onChanged.addListener((changes, areaName) => {
+  if (areaName === 'local' && changes.soulphya_settings) {
+    const newSettings = changes.soulphya_settings.newValue;
+    if (newSettings && newSettings.wsUrl && newSettings.wsUrl !== wsUrl) {
+      wsUrl = newSettings.wsUrl;
+      if (ws) { ws.close(); }
+    }
+  }
+});
 
 function connect() {
   try {
-    ws = new WebSocket('ws://localhost:8765');
+    ws = new WebSocket(wsUrl);
 
     ws.onopen = () => {
       console.log('[SoulPHYA] WebSocket connected to MCP server');
@@ -15,10 +35,14 @@ function connect() {
     };
 
     ws.onmessage = (e) => {
-      chrome.runtime.sendMessage({
-        type: 'mcp_event',
-        data: JSON.parse(e.data)
-      }).catch(() => {});
+      try {
+        chrome.runtime.sendMessage({
+          type: 'mcp_event',
+          data: JSON.parse(e.data)
+        }, () => {
+          if (chrome.runtime.lastError) { /* no listener — ignored */ }
+        });
+      } catch (_) { /* popup closed */ }
     };
 
     ws.onclose = () => {
@@ -32,8 +56,6 @@ function connect() {
     setTimeout(connect, 5000);
   }
 }
-
-connect();
 
 chrome.runtime.onMessage.addListener((msg) => {
   if (msg.type === 'mcp_send') {
