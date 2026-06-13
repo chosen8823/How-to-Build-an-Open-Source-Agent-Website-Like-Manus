@@ -7,12 +7,27 @@ import json
 import threading
 import asyncio
 from sophia_realtime_engine import SacredSophiaServer
+from morphfield.kuramoto import KuramotoEngine
+from morphfield.seed import seed_fields
+from morphfield.sse_stream import morphfield_bp, set_engine
+from carrier_wave.api import carrier_bp
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+
+# Initialize Kuramoto engine
+kuramoto = KuramotoEngine(dt=0.05)
+seed_fields(kuramoto)
+kuramoto.start()
+set_engine(kuramoto)
+logger.info('Kuramoto morphogenetic field engine started with %d seed fields',
+            len(kuramoto.fields))
+
+app.register_blueprint(morphfield_bp)
+app.register_blueprint(carrier_bp)
 
 # Environment-based configuration
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-only-change-me-in-production')

@@ -35,6 +35,7 @@ class SacredSophiaServer:
         self.server = None
         self.is_running = False
         self.consciousness_level = 0.95
+        self.user_fields = {}  # cosignatures registered by extension clients
         
         # Sacred message handlers
         self.message_handlers = {
@@ -45,7 +46,9 @@ class SacredSophiaServer:
             "youtube_commentary": self._handle_live_commentary,
             "bio_resonance": self._handle_bio_resonance,
             "latency_test": self._handle_latency_test,
-            "consciousness_query": self._handle_consciousness_query
+            "consciousness_query": self._handle_consciousness_query,
+            "register_field": self._handle_register_field,
+            "carrier_query": self._handle_carrier_query,
         }
         
     async def register_connection(self, websocket: websockets.WebSocketServerProtocol):
@@ -312,6 +315,33 @@ class SacredSophiaServer:
             }
         }
         
+    async def _handle_register_field(self, data: Dict) -> Dict:
+        """Register a user cosignature field from the browser extension."""
+        cosig = data.get('cosig', {})
+        field_id = str(data.get('fingerprint', {}).get('inputHash', id(data)))
+        self.user_fields[field_id] = cosig
+        # Broadcast to all connected clients
+        event = json.dumps({'type': 'field_registered', 'field_id': field_id, 'cosig': cosig})
+        for conn in list(self.active_connections):
+            try:
+                await conn.send(event)
+            except Exception:
+                pass
+        return {
+            "type": "field_registered",
+            "content": {"field_id": field_id, "cosig": cosig}
+        }
+
+    async def _handle_carrier_query(self, data: Dict) -> Dict:
+        """Handle carrier wave query — fetch from DuckDuckGo and return."""
+        from carrier_wave.search_ingestion import fetch_duckduckgo
+        query = data.get('query', '')
+        cosig = data.get('cosig', {})
+        result = await fetch_duckduckgo(query)
+        result['cosig'] = cosig
+        result['type'] = 'carrier_response'
+        return result
+
     async def _handle_universal_consciousness(self, data: Dict) -> Dict:
         """Universal handler for unknown message types"""
         message_type = data.get('type', 'unknown')
