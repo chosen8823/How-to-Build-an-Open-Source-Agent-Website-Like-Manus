@@ -15,9 +15,11 @@ class FrameRenderer {
         // Load all existing trees
         try {
             const resp = await fetch('/api/frames/list');
-            const ids = await resp.json();
-            for (const id of ids.root_frame_ids) {
-                await this._loadTree(id);
+            if (resp.ok) {
+                const ids = await resp.json();
+                for (const id of ids.root_frame_ids) {
+                    await this._loadTree(id);
+                }
             }
         } catch (e) {
             console.warn('Frame store not available:', e);
@@ -35,13 +37,31 @@ class FrameRenderer {
         this._layout();
         this._loop();
         this.canvas.addEventListener('click', (e) => this._onClick(e));
+
+        // Resize handler
+        window.addEventListener('resize', () => this._onResize());
+        new ResizeObserver(() => this._onResize()).observe(this.canvas.parentElement);
+    }
+
+    _onResize() {
+        const parent = this.canvas.parentElement;
+        if (parent) {
+            this.canvas.width = parent.clientWidth;
+            this.canvas.height = parent.clientHeight;
+            this._layout();
+        }
     }
 
     async _loadTree(rootId) {
-        const resp = await fetch(`/api/frames/${rootId}`);
-        const tree = await resp.json();
-        this.trees[rootId] = tree;
-        this._layout();
+        try {
+            const resp = await fetch(`/api/frames/${rootId}`);
+            if (!resp.ok) return;
+            const tree = await resp.json();
+            this.trees[rootId] = tree;
+            this._layout();
+        } catch (e) {
+            console.warn('Failed to load tree:', rootId, e);
+        }
     }
 
     _layout() {
@@ -127,7 +147,6 @@ class FrameRenderer {
             if (!rootPos) continue;
             for (const [fid, pos] of Object.entries(this.positions)) {
                 if (fid !== rootId && !pos.frame?.parent_frame_id) {
-                    // Inferred child frame -- draw connector to root
                     ctx.beginPath();
                     ctx.moveTo(rootPos.x, rootPos.y);
                     ctx.lineTo(pos.x, pos.y);
@@ -173,7 +192,6 @@ class FrameRenderer {
         // Draw artifact satellites
         for (const [aid, apos] of Object.entries(this.artifactPos)) {
             const isSelected = this.selected === aid;
-            // Color by content_type
             const ct = apos.art.content_type;
             let color = 'rgba(180,255,180,0.7)';
             if (ct === 'image/png') color = 'rgba(255,200,100,0.8)';
@@ -185,7 +203,6 @@ class FrameRenderer {
             ctx.fillStyle = color;
             ctx.fill();
 
-            // Filename label (truncated)
             ctx.fillStyle = 'rgba(220,220,220,0.7)';
             ctx.font = '9px monospace';
             ctx.textAlign = 'center';
@@ -206,7 +223,6 @@ class FrameRenderer {
         const mx = e.clientX - rect.left;
         const my = e.clientY - rect.top;
 
-        // Check artifact satellites first (smaller, on top)
         for (const [aid, apos] of Object.entries(this.artifactPos)) {
             const dx = mx - apos.x, dy = my - apos.y;
             if (Math.sqrt(dx * dx + dy * dy) < 12) {
@@ -216,7 +232,6 @@ class FrameRenderer {
             }
         }
 
-        // Check frame nodes
         for (const [fid, pos] of Object.entries(this.positions)) {
             const dx = mx - pos.x, dy = my - pos.y;
             if (Math.sqrt(dx * dx + dy * dy) < 30) {
@@ -227,78 +242,97 @@ class FrameRenderer {
         }
     }
 
+    _el(tag, styles, text) {
+        const el = document.createElement(tag);
+        if (styles) Object.assign(el.style, styles);
+        if (text !== undefined) el.textContent = text;
+        return el;
+    }
+
     async _showArtifact(artifactId) {
-        const resp = await fetch(`/api/frames/artifact/${artifactId}`);
-        const art = await resp.json();
         const panel = document.getElementById('thought-stream-panel');
         panel.style.display = 'block';
+        panel.replaceChildren();
 
-        let html = `<h3 style="color:#aef;margin:0 0 8px">${this._escapeHtml(art.filename)}</h3>`;
-        html += `<div style="color:#888;font-size:10px;margin-bottom:12px">${this._escapeHtml(art.content_type)} &middot; ${this._escapeHtml(art.agent_name)} &middot; ${this._escapeHtml(art.storage_path)}</div>`;
+        let resp;
+        try {
+            resp = await fetch(`/api/frames/artifact/${artifactId}`);
+        } catch (e) {
+            panel.appendChild(this._el('div', {color: '#f88'}, 'Failed to fetch artifact'));
+            return;
+        }
+        if (!resp.ok) {
+            panel.appendChild(this._el('div', {color: '#f88'}, `Artifact not found (${resp.status})`));
+            return;
+        }
+        const art = await resp.json();
 
-        // Show extracted code
+        panel.appendChild(this._el('h3', {color: '#aef', margin: '0 0 8px'}, art.filename));
+        panel.appendChild(this._el('div', {color: '#888', fontSize: '10px', marginBottom: '12px'},
+            `${art.content_type} \u00B7 ${art.agent_name} \u00B7 ${art.storage_path}`));
+
         if (art.extracted_code) {
-            html += `<div style="color:#8f8;margin-bottom:6px;font-size:11px">EXTRACTED CODE:</div>`;
-            html += `<pre style="background:#0a0a18;padding:8px;border-radius:4px;overflow-x:auto;font-size:10px;color:#cfc;max-height:200px;overflow-y:auto">${this._escapeHtml(art.extracted_code.slice(0, 2000))}</pre>`;
+            panel.appendChild(this._el('div', {color: '#8f8', marginBottom: '6px', fontSize: '11px'}, 'EXTRACTED CODE:'));
+            panel.appendChild(this._el('pre', {
+                background: '#0a0a18', padding: '8px', borderRadius: '4px',
+                overflowX: 'auto', fontSize: '10px', color: '#cfc',
+                maxHeight: '200px', overflowY: 'auto'
+            }, art.extracted_code.slice(0, 2000)));
         }
 
-        // Show lineage messages (thought stream)
-        html += `<div style="color:#8af;margin:12px 0 6px;font-size:11px">THOUGHT STREAM (${art.lineage_messages.length} messages):</div>`;
+        panel.appendChild(this._el('div', {color: '#8af', margin: '12px 0 6px', fontSize: '11px'},
+            `THOUGHT STREAM (${art.lineage_messages.length} messages):`));
         for (const msg of art.lineage_messages) {
             const role = msg.role;
-            const color = role === 'assistant' ? '#aef' : '#fa8';
             const content = Array.isArray(msg.content)
                 ? msg.content.filter(c => c.type === 'text').map(c => c.text).join('\n')
                 : msg.content;
             if (content) {
-                html += `<div style="margin-bottom:8px"><span style="color:${color};font-size:10px">[${this._escapeHtml(role.toUpperCase())}]</span><div style="color:#ccc;font-size:10px;margin-top:2px;white-space:pre-wrap">${this._escapeHtml(content.slice(0, 500))}</div></div>`;
+                const wrapper = this._el('div', {marginBottom: '8px'});
+                const roleColor = role === 'assistant' ? '#aef' : '#fa8';
+                wrapper.appendChild(this._el('span', {color: roleColor, fontSize: '10px'}, `[${role.toUpperCase()}]`));
+                wrapper.appendChild(this._el('div', {
+                    color: '#ccc', fontSize: '10px', marginTop: '2px', whiteSpace: 'pre-wrap'
+                }, content.slice(0, 500)));
+                panel.appendChild(wrapper);
             }
         }
 
-        // Show environment snapshot
         if (art.environment_snapshot?.packages?.length) {
-            html += `<div style="color:#8af;margin:12px 0 6px;font-size:11px">ENVIRONMENT: ${this._escapeHtml(art.environment_snapshot.environment_name)} (Python ${this._escapeHtml(art.environment_snapshot.python_version)})</div>`;
-            html += `<div style="color:#888;font-size:9px">${art.environment_snapshot.packages.map(p => `${this._escapeHtml(p.name)}==${this._escapeHtml(p.version)}`).join(', ')}</div>`;
+            panel.appendChild(this._el('div', {color: '#8af', margin: '12px 0 6px', fontSize: '11px'},
+                `ENVIRONMENT: ${art.environment_snapshot.environment_name} (Python ${art.environment_snapshot.python_version})`));
+            const pkgs = art.environment_snapshot.packages.map(p => `${p.name}==${p.version}`).join(', ');
+            panel.appendChild(this._el('div', {color: '#888', fontSize: '9px'}, pkgs));
         }
-
-        panel.innerHTML = html;
     }
 
     _showThoughtStream(frameId) {
         const panel = document.getElementById('thought-stream-panel');
         panel.style.display = 'block';
+        panel.replaceChildren();
         const pos = this.positions[frameId];
         if (!pos) return;
 
-        let html = `<h3 style="color:#aef;margin:0 0 8px">${this._escapeHtml(pos.frame?.agent_name || frameId)}</h3>`;
-        html += `<div style="color:#888;font-size:10px;margin-bottom:12px">Status: ${this._escapeHtml(pos.frame?.status || 'unknown')}</div>`;
+        panel.appendChild(this._el('h3', {color: '#aef', margin: '0 0 8px'}, pos.frame?.agent_name || frameId));
+        panel.appendChild(this._el('div', {color: '#888', fontSize: '10px', marginBottom: '12px'},
+            `Status: ${pos.frame?.status || 'unknown'}`));
 
-        // Show input/output if root frame
         for (const [rootId, tree] of Object.entries(this.trees)) {
             if (tree.root_frame.id === frameId) {
-                html += `<div style="color:#8f8;font-size:11px;margin-bottom:6px">INPUT:</div>`;
-                html += `<div style="color:#ccc;font-size:10px;white-space:pre-wrap;margin-bottom:12px">${this._escapeHtml(JSON.stringify(tree.root_frame.input_data, null, 2).slice(0, 500))}</div>`;
+                panel.appendChild(this._el('div', {color: '#8f8', fontSize: '11px', marginBottom: '6px'}, 'INPUT:'));
+                panel.appendChild(this._el('div', {
+                    color: '#ccc', fontSize: '10px', whiteSpace: 'pre-wrap', marginBottom: '12px'
+                }, JSON.stringify(tree.root_frame.input_data, null, 2).slice(0, 500)));
                 break;
             }
         }
 
-        // Count artifacts for this frame
         let artCount = 0;
         for (const [aid, apos] of Object.entries(this.artifactPos)) {
             if (apos.art.frame_id === frameId) artCount++;
         }
-        html += `<div style="color:#fa8;font-size:11px">${artCount} artifacts &mdash; click a satellite dot to inspect</div>`;
-
-        panel.innerHTML = html;
-    }
-
-    _escapeHtml(str) {
-        if (!str) return '';
-        return String(str)
-            .replace(/&/g, '&amp;')
-            .replace(/</g, '&lt;')
-            .replace(/>/g, '&gt;')
-            .replace(/"/g, '&quot;');
+        panel.appendChild(this._el('div', {color: '#fa8', fontSize: '11px'},
+            `${artCount} artifacts \u2014 click a satellite dot to inspect`));
     }
 }
 

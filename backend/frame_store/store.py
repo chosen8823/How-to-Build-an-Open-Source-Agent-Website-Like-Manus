@@ -1,6 +1,6 @@
 import json
-import time
-from typing import Dict, List, Optional
+import threading
+from typing import Dict, List
 from queue import Queue
 
 from .schema import FrameTree, Frame, Artifact, EnvironmentSnapshot
@@ -10,6 +10,7 @@ class FrameStore:
     def __init__(self):
         self.trees: Dict[str, FrameTree] = {}  # root_frame_id -> FrameTree
         self._subscribers: List[Queue] = []
+        self._lock = threading.Lock()
 
     def ingest(self, raw: dict) -> FrameTree:
         """Parse the exact JSON schema from the user's proteomics example."""
@@ -51,7 +52,8 @@ class FrameStore:
             artifacts=artifacts,
             folders=raw.get('folders', [])
         )
-        self.trees[root.id] = tree
+        with self._lock:
+            self.trees[root.id] = tree
         self._broadcast({
             'type': 'tree_ingested',
             'root_frame_id': root.id,
@@ -61,18 +63,33 @@ class FrameStore:
 
     def subscribe(self) -> Queue:
         q = Queue()
-        self._subscribers.append(q)
+        with self._lock:
+            self._subscribers.append(q)
         return q
 
+    def unsubscribe(self, q: Queue):
+        with self._lock:
+            try:
+                self._subscribers.remove(q)
+            except ValueError:
+                pass
+
     def _broadcast(self, event: dict):
+        with self._lock:
+            subscribers = list(self._subscribers)
         dead = []
-        for q in self._subscribers:
+        for q in subscribers:
             try:
                 q.put_nowait(json.dumps(event))
             except Exception:
                 dead.append(q)
-        for q in dead:
-            self._subscribers.remove(q)
+        if dead:
+            with self._lock:
+                for q in dead:
+                    try:
+                        self._subscribers.remove(q)
+                    except ValueError:
+                        pass
 
 
 _store = FrameStore()

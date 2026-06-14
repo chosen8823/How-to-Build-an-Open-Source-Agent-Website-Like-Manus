@@ -68,11 +68,16 @@ def stream_events():
     q = store.subscribe()
 
     def generate():
-        while True:
-            try:
-                data = q.get(timeout=30)
-                yield f"data: {data}\n\n"
-            except Exception:
-                yield f"data: {json.dumps({'type': 'heartbeat'})}\n\n"
+        try:
+            while True:
+                try:
+                    data = q.get(timeout=30)
+                    yield f"data: {data}\n\n"
+                except Exception:
+                    yield f"data: {json.dumps({'type': 'heartbeat'})}\n\n"
+        except GeneratorExit:
+            pass
+        finally:
+            store.unsubscribe(q)
 
     return Response(generate(), mimetype='text/event-stream')
