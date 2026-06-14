@@ -14,6 +14,17 @@ logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
 
+# Register Frame Store blueprint
+from frame_store.api import frame_store_bp
+app.register_blueprint(frame_store_bp)
+
+# Seed the proteomics example on startup so the renderer has data immediately
+_seed_path = os.path.join(os.path.dirname(__file__), 'frame_store', 'seed_proteomics.json')
+if os.path.exists(_seed_path):
+    from frame_store.store import get_store
+    with open(_seed_path) as f:
+        get_store().ingest(json.load(f))
+
 # Environment-based configuration
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-only-change-me-in-production')
 
