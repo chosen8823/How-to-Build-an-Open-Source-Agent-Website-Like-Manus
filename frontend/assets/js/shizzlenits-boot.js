@@ -7,7 +7,11 @@ class ShizzlenitsBoot {
 
     async boot() {
         // Connect to WCF WebSocket
-        this.ws = new WebSocket('ws://localhost:8765');
+        const wsProtocol = window.location.protocol === 'https:' ? 'wss:' : 'ws:';
+        const defaultWsUrl = `${wsProtocol}//${window.location.hostname}:8765`;
+        const wsUrl = window.SHIZZLENITS_WS_URL || defaultWsUrl;
+
+        this.ws = new WebSocket(wsUrl);
         
         this.ws.onopen = () => {
             // Register as WCF client
@@ -88,7 +92,9 @@ class ShizzlenitsBoot {
         btn.textContent = 'DISSOLVE';
         btn.style.cssText = 'position:fixed;bottom:20px;right:20px;z-index:9999;background:#0a0a0f;color:#432;border:1px solid #432;padding:8px 16px;font-family:monospace;font-size:11px;cursor:pointer;letter-spacing:2px;';
         btn.onclick = () => {
-            this.ws.send(JSON.stringify({ type: 'wcf_dissolve' }));
+            if (this.ws && this.ws.readyState === WebSocket.OPEN) {
+                this.ws.send(JSON.stringify({ type: 'wcf_dissolve' }));
+            }
         };
         document.body.appendChild(btn);
         this.dissolveBtn = btn;

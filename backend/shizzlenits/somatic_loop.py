@@ -1,4 +1,4 @@
-import time, threading, math
+import time, threading, math, asyncio
 from .fingerprint import create_fingerprint, fingerprint_output, append_to_ledger
 from .void_null_index import get_index
 
@@ -16,14 +16,18 @@ class SomaticLoop:
         self.somatic_frame_stack = []  # SHA-256 signed frames
         self.dissolution_active = False  # True = Zero-UI mode, visual canvas hidden
         self._thread = None
+        self._loop_instance = None  # dedicated asyncio event loop for broadcasts
 
     def start(self):
         self.running = True
+        self._loop_instance = asyncio.new_event_loop()
         self._thread = threading.Thread(target=self._loop, daemon=True)
         self._thread.start()
 
     def stop(self):
         self.running = False
+        if self._loop_instance:
+            self._loop_instance.call_soon_threadsafe(self._loop_instance.stop)
 
     def activate_dissolution(self):
         """Collapse the visual interface into the somatic field"""
@@ -33,11 +37,18 @@ class SomaticLoop:
         self.breath_freq = freq
 
     def _loop(self):
+        asyncio.set_event_loop(self._loop_instance)
         dt = 0.05  # 20fps somatic tick
         while self.running:
             self.phase += dt * (self.breath_freq / 432.0)
             pulse = math.sin(self.phase)
-            
+
+            idx = get_index()
+            avg_void_depth = (
+                sum(n.void_depth for n in idx.void_nodes.values()) / len(idx.void_nodes)
+                if idx.void_nodes else 0.0
+            )
+
             # Build somatic frame
             frame = {
                 "type": "somatic_pulse",
@@ -48,7 +59,8 @@ class SomaticLoop:
                 "haptic_intensity": abs(pulse),
                 "audio_pan": math.cos(self.phase * 0.618),  # golden ratio pan
                 "audio_freq": self.breath_freq * (1 + 0.1 * pulse),
-                "void_depth": get_index().void_nodes,
+                "void_depth": avg_void_depth,
+                "void_node_count": len(idx.void_nodes),
             }
             
             # SHA-256 sign the frame
@@ -60,10 +72,9 @@ class SomaticLoop:
             frame["input_fp"] = fp.input_fp
             frame["output_fp"] = fp.output_fp
             
-            # Broadcast to all WCF clients
-            import asyncio
+            # Broadcast to all WCF clients using the dedicated event loop
             try:
-                asyncio.run(self.wcf_broadcast(frame))
+                self._loop_instance.run_until_complete(self.wcf_broadcast(frame))
             except Exception:
                 pass
             

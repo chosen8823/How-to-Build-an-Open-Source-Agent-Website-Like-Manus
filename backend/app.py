@@ -37,8 +37,9 @@ _shizzlenits_module.wcf_instance = wcf
 
 app.register_blueprint(shizzlenits_bp)
 
-# Start WCF somatic loop alongside the existing WebSocket thread
-wcf.start()
+# Start WCF somatic loop — guarded against Flask reloader duplicate imports
+if os.environ.get('WERKZEUG_RUN_MAIN') == 'true' or not app.debug:
+    wcf.start()
 
 # Health check
 @app.route('/healthz')

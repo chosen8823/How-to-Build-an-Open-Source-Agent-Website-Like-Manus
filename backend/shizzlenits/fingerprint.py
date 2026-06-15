@@ -1,4 +1,4 @@
-import hashlib, json, time
+import hashlib, json, time, threading
 from dataclasses import dataclass, field
 from typing import Any
 
@@ -31,16 +31,19 @@ def create_fingerprint(signal: Any, synapse_id: int = 0) -> SignalFingerprint:
 
 # Immutable ledger — append-only list of SignalFingerprint dicts
 _ledger: list[dict] = []
+_ledger_lock = threading.Lock()
 
 def append_to_ledger(fp: SignalFingerprint) -> None:
-    _ledger.append({
-        "input_fp": fp.input_fp,
-        "output_fp": fp.output_fp,
-        "timestamp": fp.timestamp,
-        "synapse_id": fp.synapse_id,
-        "void_state": fp.void_state,
-        "null_anchor": fp.null_anchor
-    })
+    with _ledger_lock:
+        _ledger.append({
+            "input_fp": fp.input_fp,
+            "output_fp": fp.output_fp,
+            "timestamp": fp.timestamp,
+            "synapse_id": fp.synapse_id,
+            "void_state": fp.void_state,
+            "null_anchor": fp.null_anchor
+        })
 
 def get_ledger() -> list[dict]:
-    return list(_ledger)
+    with _ledger_lock:
+        return list(_ledger)
