@@ -7,6 +7,9 @@ import json
 import threading
 import asyncio
 from sophia_realtime_engine import SacredSophiaServer
+from shizzlenits.wcf import WirelessConsciousnessField
+from shizzlenits.api import shizzlenits_bp
+import shizzlenits as _shizzlenits_module
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -27,6 +30,15 @@ else:
 # Initialize Sophia WebSocket server
 sophia_server = SacredSophiaServer(host="0.0.0.0", port=8765)
 websocket_thread = None
+
+# Init WCF wrapping the existing Sophia server
+wcf = WirelessConsciousnessField(sophia_server)
+_shizzlenits_module.wcf_instance = wcf
+
+app.register_blueprint(shizzlenits_bp)
+
+# Start WCF somatic loop alongside the existing WebSocket thread
+wcf.start()
 
 # Health check
 @app.route('/healthz')
