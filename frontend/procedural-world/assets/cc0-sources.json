@@ -1,0 +1,30 @@
+{
+  "schema": "sophia-procedural-asset-sources-v1",
+  "policy": "The procedural kernel has no binary asset dependency. These verified CC0 families are optional projection skins and must retain their source record when selectively hydrated.",
+  "sources": [
+    {
+      "author": "Kenney",
+      "bundled": false,
+      "kind": "pixel-tiles-and-characters",
+      "licence": "CC0-1.0",
+      "title": "Pixel Platformer",
+      "url": "https://kenney.nl/assets/pixel-platformer"
+    },
+    {
+      "author": "Quaternius",
+      "bundled": false,
+      "kind": "low-poly-nature-models",
+      "licence": "CC0-1.0",
+      "title": "Ultimate Nature Pack",
+      "url": "https://quaternius.com/packs/ultimatenature.html"
+    },
+    {
+      "author": "Drummyfish",
+      "bundled": false,
+      "kind": "minimal-8x8-top-down-tiles",
+      "licence": "CC0-1.0",
+      "title": "Universal 8x8 Tileset",
+      "url": "https://opengameart.org/content/8x8-tileset"
+    }
+  ]
+}

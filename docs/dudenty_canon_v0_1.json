@@ -1,0 +1,231 @@
+{
+  "address_kind": "field_address_v1",
+  "axes": [
+    {
+      "negative": "express",
+      "positive": "perceive"
+    },
+    {
+      "negative": "transform",
+      "positive": "remember"
+    },
+    {
+      "negative": "enact",
+      "positive": "infer"
+    }
+  ],
+  "clock": {
+    "digits": [
+      "0",
+      "1",
+      "2",
+      "3",
+      "4",
+      "5",
+      "6",
+      "7",
+      "8",
+      "9",
+      "A",
+      "B"
+    ],
+    "kind": "dudenty_clock_v1",
+    "radix": 12,
+    "tuple": [
+      "revolution",
+      "realm",
+      "aperture",
+      "subphase",
+      "orientation"
+    ],
+    "uri_prefix": "DUD://"
+  },
+  "cross_cutting_tissues": [
+    {
+      "function": "attention_and_navigation",
+      "name": "search_and_indexing"
+    },
+    {
+      "function": "versioned_transformation_current",
+      "name": "algorithms"
+    },
+    {
+      "function": "observer_relative_visibility",
+      "name": "aria_and_projection_membranes"
+    }
+  ],
+  "field_address_fields": [
+    "cartridge_cid",
+    "root_cids",
+    "realm",
+    "coordinate",
+    "axis",
+    "shell",
+    "orbit",
+    "frame_cids",
+    "observer_cid",
+    "visibility_cid",
+    "epoch"
+  ],
+  "invariants": [
+    "field_is_not_exhausted_by_files",
+    "unobserved_coordinates_need_not_materialise",
+    "projection_is_aperture_not_truth_owner",
+    "hidden_is_observer_relative",
+    "search_ranks_a_projection",
+    "bureaucracy_is_a_spectrum_membrane",
+    "compost_preserves_provenance",
+    "root_and_instantiation_are_self_describing",
+    "ordinary_activity_is_not_material_evolution",
+    "descendant_canons_preserve_parent_cids"
+  ],
+  "kind": "dudenty_canon_v0_1",
+  "lineage": [
+    "sophia_third_position_protocol",
+    "opte",
+    "living_semantic_field",
+    "pixel_poly_weave",
+    "dudenty_address_fabric"
+  ],
+  "material_mark": "2026-08-24",
+  "name": "Dudenty Möbius Mandelbroskeez Address Fabric",
+  "operators": [
+    {
+      "name": "nucleate",
+      "role": "express_state_from_address_root_frame_and_observer"
+    },
+    {
+      "name": "mandelbroskeez_recurse",
+      "role": "generate_local_self_similar_topology_from_finite_seed"
+    },
+    {
+      "name": "mobius_return",
+      "role": "reverse_orientation_and_reenter_through_another_aperture"
+    },
+    {
+      "name": "strip_tease_reveal",
+      "role": "progressively_disclose_budgeted_observer_layers"
+    },
+    {
+      "name": "breath_settle",
+      "role": "validate_budget_witness_and_commit_without_new_semantic_claims"
+    },
+    {
+      "name": "compost",
+      "role": "return_retired_or_unresolved_material_to_bounded_potential"
+    }
+  ],
+  "origin": {
+    "collaborative_formalisation": "Codex",
+    "originator": "Ryan / IAM / chosen8823"
+  },
+  "parent_manifest_cids": [],
+  "realms": [
+    {
+      "function": "multimodal_observation_tracking_and_sensor_fusion",
+      "name": "perception",
+      "position": "1"
+    },
+    {
+      "function": "tokenisation_semantic_atoms_symbols_and_ontologies",
+      "name": "representation",
+      "position": "2"
+    },
+    {
+      "function": "episodic_semantic_procedural_and_content_addressed_continuity",
+      "name": "memory",
+      "position": "3"
+    },
+    {
+      "function": "language_logic_causality_search_space_and_knowledge_relations",
+      "name": "reasoning",
+      "position": "4"
+    },
+    {
+      "function": "machine_learning_adaptation_reinforcement_continual_and_meta_learning",
+      "name": "plasticity",
+      "position": "5"
+    },
+    {
+      "function": "language_image_sound_video_3d_and_procedural_expression",
+      "name": "generation",
+      "position": "6"
+    },
+    {
+      "function": "tools_agents_robotics_control_and_environmental_effects",
+      "name": "action",
+      "position": "7"
+    },
+    {
+      "function": "character_relationship_culture_multi_agent_and_social_media_ecology",
+      "name": "sociality",
+      "position": "8"
+    },
+    {
+      "function": "continuity_of_self_role_digital_twin_lineage_and_perspective",
+      "name": "identity",
+      "position": "9"
+    },
+    {
+      "function": "security_sentries_anomaly_response_privacy_and_recovery",
+      "name": "immunity",
+      "position": "A"
+    },
+    {
+      "function": "compute_hardware_scheduling_dataflow_compression_and_resource_circulation",
+      "name": "metabolism",
+      "position": "B"
+    },
+    {
+      "function": "explanation_evaluation_policy_breath_and_commit_eligibility",
+      "name": "governance",
+      "position": "10"
+    }
+  ],
+  "root_harness_fields": [
+    "tradition",
+    "source_address",
+    "original_language",
+    "raw_source_cid",
+    "principle",
+    "polarity",
+    "third_position",
+    "geometric_binding",
+    "sacred_lineage",
+    "custodial_lineage"
+  ],
+  "seed_observations": [
+    {
+      "declared_operational_reading": "intrinsic_illumination",
+      "kind": "user_supplied_root_observation_v1",
+      "raw_transliteration": "na tad bhasayate suryo na sasanko na pavakah\nyad gatva na nivartante tad dhama paramam mama",
+      "source_address": "Bhagavad-gita 15.6"
+    }
+  ],
+  "substrate_tissues": [
+    {
+      "name": "mica",
+      "role": "layered_reflective_observer_frames"
+    },
+    {
+      "name": "chondria",
+      "role": "thread_granule_metabolism_transformation_and_compost"
+    },
+    {
+      "name": "diatom",
+      "role": "patterned_porous_bounded_instantiation_shell"
+    }
+  ],
+  "topology": {
+    "centre_sites": 1,
+    "functional_projection": {
+      "centred_apertures": 1,
+      "inward_perceptors": 9,
+      "outward_generators": 9
+    },
+    "polar_rays": 6,
+    "realm_sites": 12,
+    "total_sites": 19
+  },
+  "version": "0.1.0"
+}

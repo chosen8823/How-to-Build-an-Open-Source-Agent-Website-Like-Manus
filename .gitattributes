@@ -1,0 +1,9 @@
+docs/*.md text eol=lf
+docs/*.json text eol=lf
+docs/signing/* text eol=lf
+frontend/procedural-world/*.js text eol=lf
+frontend/procedural-world/*.mjs text eol=lf
+frontend/procedural-world/*.html text eol=lf
+frontend/procedural-world/*.css text eol=lf
+frontend/procedural-world/*.md text eol=lf
+frontend/procedural-world/*.json text eol=lf

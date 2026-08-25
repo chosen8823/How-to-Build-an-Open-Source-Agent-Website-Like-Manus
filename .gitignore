@@ -50,6 +50,7 @@ venv.bak/
 node_modules/
 dist/
 build/
+.playwright-cli/
 
 # IDE (keep VS Code settings for SOPHIA consciousness workspace context)
 .vscode/settings.json

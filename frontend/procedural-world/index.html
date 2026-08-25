@@ -1,0 +1,69 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="One deterministic procedural world projected as both 8-bit tiles and low-poly geometry.">
+  <title>Sophia Procedural Field — Pixel × Poly Weave</title>
+  <link rel="icon" href="data:,">
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <main class="field-shell">
+    <header class="field-header">
+      <div>
+        <p class="eyebrow">D3^LUX // PROCEDURAL WORLD APERTURE</p>
+        <h1>Pixel × Poly Weave</h1>
+        <p class="lede">One seed. One living state. Two geometric projections.</p>
+      </div>
+      <a class="back-link" href="../index.html">Return to SoulPHYA</a>
+    </header>
+
+    <section class="controls" aria-label="World controls">
+      <label class="seed-control" for="world-seed">
+        <span>World seed</span>
+        <input id="world-seed" value="vesica-piscis-spiral-helix" autocomplete="off" spellcheck="false">
+      </label>
+      <button type="button" data-regenerate>Regenerate</button>
+      <button type="button" data-step>Single pulse</button>
+      <button type="button" data-play aria-pressed="false">Play heartbeat</button>
+      <button type="button" data-export>Export state</button>
+      <div class="mode-switch" aria-label="Projection mode">
+        <button type="button" data-mode="pixel" aria-pressed="false">8-bit</button>
+        <button type="button" data-mode="weave" aria-pressed="true">Weave</button>
+        <button type="button" data-mode="poly" aria-pressed="false">Poly</button>
+      </div>
+    </section>
+
+    <section class="world-grid" data-mode="weave" aria-label="Procedural world projections">
+      <article class="projection-panel" data-panel="pixel">
+        <div class="panel-heading">
+          <div><span class="aperture-mark">P₈</span><h2>Glyph field</h2></div>
+          <p>Terrain read as discrete colour, tile, and occurrence.</p>
+        </div>
+        <canvas id="pixel-field" aria-label="Interactive pixel projection of the generated world"></canvas>
+      </article>
+      <article class="projection-panel" data-panel="poly">
+        <div class="panel-heading">
+          <div><span class="aperture-mark">P₃</span><h2>Volume field</h2></div>
+          <p>The same terrain read as height, surface, and spatial relation.</p>
+        </div>
+        <canvas id="poly-field" aria-label="Interactive low-poly projection of the generated world"></canvas>
+      </article>
+    </section>
+
+    <section class="state-ribbon" aria-label="Shared world state">
+      <div><span>tick</span><strong data-tick>0</strong></div>
+      <div><span>entities</span><strong data-entity-count>0</strong></div>
+      <div><span>focus cell</span><strong data-focus>none</strong></div>
+      <div class="fingerprint"><span>shared fingerprint</span><strong data-fingerprint>—</strong></div>
+    </section>
+
+    <footer>
+      <p>Click either projection to focus the same semantic cell in both. The renderers do not own the world; they only interpret it.</p>
+      <a href="assets/cc0-sources.json">CC0 source manifest</a>
+    </footer>
+  </main>
+  <script type="module" src="app.js"></script>
+</body>
+</html>

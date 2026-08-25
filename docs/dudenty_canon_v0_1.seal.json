@@ -1,0 +1,44 @@
+{
+  "artifacts": [
+    {
+      "artifact_cid": "sha256:066be55d11b35910a139ac7801bd79a18b23aecca015b60dc6890a30a0d9f007",
+      "cartridge_source_byte_length": 17607,
+      "cartridge_card_cid": "sha256:6673f6e74ff740fe4db1ad7000df26eb4a463a855cd5681565bb175ea9a05c8e",
+      "cartridge_payload_cid": "sha256:4efb207b340fe5f7a257c8ec66a37cf73c25162615b17a9090e6c42faa423479",
+      "identity_byte_length": 17607,
+      "path": "docs/DUDENTY_CANON_V0_1.md",
+      "role": "human_canon",
+      "source_ref": "canon:dudenty:v0.1:human"
+    },
+    {
+      "artifact_cid": "sha256:aa98d4e20c69ace08cb3795eda593406294fb4d653141f2324ff67615cefcc0e",
+      "cartridge_source_byte_length": 5646,
+      "cartridge_card_cid": "sha256:b8cac104c4fda6bfc52866412b830f45aa82d1f011d9b385241270aba63cb2aa",
+      "cartridge_payload_cid": "sha256:bbc8501e09588c4926042daa07bf5f08e3bda8b2fbfd1a37577049a5d2b5501a",
+      "identity_byte_length": 4279,
+      "path": "docs/dudenty_canon_v0_1.json",
+      "role": "machine_canon",
+      "source_ref": "canon:dudenty:v0.1:machine"
+    },
+    {
+      "artifact_cid": "sha256:269270f7bd71b5559fd0227657a9a7161f5eddaefc6fc7fbcdc3e2d798a1ed1f",
+      "cartridge_source_byte_length": 970,
+      "cartridge_card_cid": "sha256:19e848069eef60fa515bbd061c64962e595d4223dc9fc938fa3f6a9bdb7e3bfa",
+      "cartridge_payload_cid": "sha256:289e10ec351237c92e8a22a1899f06de91503f6afb11f1433a12a25a27e2e460",
+      "identity_byte_length": 817,
+      "path": "docs/dudenty_canon_v0_1.receipt.json",
+      "role": "provenance_receipt",
+      "source_ref": "canon:dudenty:v0.1:provenance"
+    }
+  ],
+  "canonicalisation": "opte_canonical_json_v1",
+  "cartridge_root": "opte-state/world-memory",
+  "kind": "dudenty_canon_seal_v1",
+  "material_mark": "2026-08-24",
+  "name": "Dudenty Mobius Mandelbroskeez Address Fabric",
+  "originator": "Ryan / IAM / chosen8823",
+  "parent_continuity_capsule_cids": [
+    "sha256:d7303621b7382f44649bc552d6d6c79a919670b6bf65b0fc8fd91807e015ba6c"
+  ],
+  "version": "0.1.0"
+}

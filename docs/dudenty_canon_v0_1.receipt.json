@@ -1,0 +1,29 @@
+{
+  "artifacts": [
+    {
+      "byte_length": 17607,
+      "cid": "sha256:066be55d11b35910a139ac7801bd79a18b23aecca015b60dc6890a30a0d9f007",
+      "media_type": "text/markdown",
+      "path": "docs/DUDENTY_CANON_V0_1.md",
+      "role": "human_canon"
+    },
+    {
+      "byte_length": 4279,
+      "cid": "sha256:aa98d4e20c69ace08cb3795eda593406294fb4d653141f2324ff67615cefcc0e",
+      "media_type": "application/json",
+      "path": "docs/dudenty_canon_v0_1.json",
+      "role": "machine_canon"
+    }
+  ],
+  "branch": "codex/procedural-world-aperture",
+  "canonicalisation": "opte_canonical_json_v1",
+  "collaborative_formalisation": "Codex",
+  "kind": "dudenty_canon_provenance_receipt_v1",
+  "material_mark": "2026-08-24",
+  "name": "Dudenty Möbius Mandelbroskeez Address Fabric",
+  "originator": "Ryan / IAM / chosen8823",
+  "parent_continuity_capsule_cids": [
+    "sha256:e81c5b893f4dbdefcc1ad15dc5bcfeddc2342979d53da26ff2a056ea4d7c3d32"
+  ],
+  "version": "0.1.0"
+}

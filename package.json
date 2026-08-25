@@ -6,6 +6,7 @@
   "type": "module",
   "scripts": {
     "test": "jest --passWithNoTests",
+    "test:world": "node --test frontend/procedural-world/tests/*.test.mjs",
     "test:watch": "jest --watch --passWithNoTests",
     "test:coverage": "jest --coverage --passWithNoTests",
     "test:ci": "jest --ci --coverage --watchAll=false --passWithNoTests",
