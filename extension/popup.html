@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SoulPHYA — AI Companion</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    body { width: 380px; min-height: 520px; margin: 0; font-family: 'Inter', system-ui, sans-serif; background: #0a0a0f; color: #e2e8f0; }
+    ::-webkit-scrollbar { width: 4px; }
+    ::-webkit-scrollbar-thumb { background: #4a5568; border-radius: 2px; }
+    .glow { box-shadow: 0 0 20px rgba(139, 92, 246, 0.3); }
+    .pulse-dot { animation: pulse 2s infinite; }
+    @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+    #sandbox-frame { border: none; width: 100%; height: 200px; background: #0a0a0f; border-radius: 8px; }
+    .chat-bubble { max-width: 90%; padding: 8px 12px; border-radius: 12px; margin: 4px 0; font-size: 13px; line-height: 1.4; }
+    .chat-user { background: #4a2d8a; margin-left: auto; border-bottom-right-radius: 4px; }
+    .chat-system { background: #1e293b; margin-right: auto; border-bottom-left-radius: 4px; }
+    .quick-btn { transition: all 0.15s; }
+    .quick-btn:hover { transform: translateY(-1px); box-shadow: 0 2px 8px rgba(139,92,246,0.4); }
+
+    /* Settings modal */
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 50; }
+    .modal-overlay.active { display: flex; align-items: center; justify-content: center; }
+    .modal-box { background: #1a1a2e; border: 1px solid #334155; border-radius: 12px; padding: 20px; width: 340px; }
+  </style>
+</head>
+<body class="flex flex-col">
+
+  <!-- Header -->
+  <div class="flex items-center justify-between px-4 py-3 border-b border-gray-800">
+    <div class="flex items-center gap-2">
+      <div class="w-2 h-2 rounded-full bg-violet-500 pulse-dot"></div>
+      <span class="text-sm font-semibold tracking-wide">SoulPHYA</span>
+      <span class="text-[10px] text-gray-500 ml-1">v0.1.0</span>
+    </div>
+    <div class="flex items-center gap-2">
+      <button id="btn-sandbox" title="Field Visualizer" class="p-1 rounded hover:bg-gray-800">
+        <i data-lucide="grid-3x3" class="w-4 h-4 text-gray-400"></i>
+      </button>
+      <button id="btn-settings" title="Settings" class="p-1 rounded hover:bg-gray-800">
+        <i data-lucide="settings" class="w-4 h-4 text-gray-400"></i>
+      </button>
+    </div>
+  </div>
+
+  <!-- Sandbox panel (hidden by default) -->
+  <div id="sandbox-panel" class="hidden px-3 py-2">
+    <iframe id="sandbox-frame" src="sandbox.html"></iframe>
+  </div>
+
+  <!-- Chat area -->
+  <div id="chat-area" class="flex-1 overflow-y-auto px-3 py-2 flex flex-col gap-1" style="max-height:340px;">
+    <div class="chat-bubble chat-system">
+      <strong class="text-violet-400 text-xs">Sophia</strong><br>
+      Morphogenetic field active. Carrier wave standing by. <code class="text-[11px] text-emerald-400">x^x=0</code>
+    </div>
+  </div>
+
+  <!-- Quick actions -->
+  <div class="flex gap-2 px-3 py-2 border-t border-gray-800">
+    <button class="quick-btn flex-1 text-xs py-1.5 rounded-lg bg-violet-900/40 hover:bg-violet-800/60 text-violet-300" data-action="scan">Scan page</button>
+    <button class="quick-btn flex-1 text-xs py-1.5 rounded-lg bg-indigo-900/40 hover:bg-indigo-800/60 text-indigo-300" data-action="carrier">Carrier wave</button>
+    <button class="quick-btn flex-1 text-xs py-1.5 rounded-lg bg-cyan-900/40 hover:bg-cyan-800/60 text-cyan-300" data-action="cosig">Cosignature</button>
+  </div>
+
+  <!-- Input -->
+  <div class="flex items-center gap-2 px-3 py-2 border-t border-gray-800">
+    <button id="btn-voice" title="Voice input" class="p-1.5 rounded-lg hover:bg-gray-800">
+      <i data-lucide="mic" class="w-4 h-4 text-gray-400"></i>
+    </button>
+    <input id="user-input" type="text" placeholder="Ask Sophia…"
+      class="flex-1 bg-gray-900 border border-gray-700 rounded-lg px-3 py-1.5 text-sm focus:outline-none focus:border-violet-600">
+    <button id="btn-send" class="p-1.5 rounded-lg bg-violet-700 hover:bg-violet-600">
+      <i data-lucide="send" class="w-4 h-4"></i>
+    </button>
+  </div>
+
+  <!-- Settings modal -->
+  <div id="settings-modal" class="modal-overlay">
+    <div class="modal-box">
+      <div class="flex justify-between items-center mb-4">
+        <h3 class="text-sm font-semibold">Settings</h3>
+        <button id="close-settings" class="text-gray-500 hover:text-white">&times;</button>
+      </div>
+      <label class="block text-xs text-gray-400 mb-1">MCP WebSocket URL</label>
+      <input id="ws-url" type="text" value="ws://localhost:8765"
+        class="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-sm mb-3">
+      <label class="block text-xs text-gray-400 mb-1">Base Frequency (Hz)</label>
+      <input id="base-freq" type="number" value="432"
+        class="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-sm mb-3">
+      <button id="save-settings" class="w-full py-1.5 rounded bg-violet-700 hover:bg-violet-600 text-sm">Save</button>
+    </div>
+  </div>
+
+  <script src="popup.js"></script>
+</body>
+</html>

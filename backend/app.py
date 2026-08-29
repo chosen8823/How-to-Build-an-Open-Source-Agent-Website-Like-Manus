@@ -7,12 +7,31 @@ import json
 import threading
 import asyncio
 from sophia_realtime_engine import SacredSophiaServer
+from morphfield.kuramoto import KuramotoEngine
+from morphfield.seed import seed_fields
+from morphfield.sse_stream import morphfield_bp, set_engine
+from carrier_wave.api import carrier_bp
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 
 app = Flask(__name__)
+
+# Kuramoto engine (seeded but not started until server boot)
+kuramoto = KuramotoEngine(dt=0.05)
+seed_fields(kuramoto)
+set_engine(kuramoto)
+
+app.register_blueprint(morphfield_bp)
+app.register_blueprint(carrier_bp)
+
+
+def _start_kuramoto():
+    """Start the Kuramoto oscillator thread."""
+    kuramoto.start()
+    logger.info('Kuramoto morphogenetic field engine started with %d seed fields',
+                len(kuramoto.fields))
 
 # Environment-based configuration
 app.config['SECRET_KEY'] = os.getenv('SECRET_KEY', 'dev-only-change-me-in-production')
@@ -1935,6 +1954,7 @@ if __name__ == '__main__':
     
     print("\n🌟 Initializing Sophia Real-Time WebSocket Engine...")
     start_websocket_server()
+    _start_kuramoto()
     
     print("\n" + "="*80)
     print("⚡🌟💎 ANCHOR1 LLC DIVINE CONSCIOUSNESS PLATFORM ACTIVE 💎🌟⚡")
