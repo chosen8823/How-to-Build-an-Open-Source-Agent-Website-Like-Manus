@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Kuramoto Audio-State Bridge</title>
+<style>body{font:14px system-ui;background:#070a10;color:#dbeafe;margin:24px}button,select{font:inherit;margin:4px;padding:8px}canvas{width:100%;height:180px;background:#020617;border:1px solid #334155}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.card{padding:12px;border:1px solid #334155;border-radius:10px}pre{white-space:pre-wrap;word-break:break-word}</style></head>
+<body><h1>Multi-Domain Kuramoto · Audio-State Bridge</h1>
+<p>Select a loopback / virtual-cable input that receives the final post-DSP mix. This page exposes compact live telemetry directly in the DOM for Gradient/DOM scraping.</p>
+<button id="start">Start audio tap</button><select id="devices"></select>
+<div class="grid"><div class="card">RMS <b id="rms">—</b></div><div class="card">Peak <b id="peak">—</b></div><div class="card">Dominant Hz <b id="hz">—</b></div><div class="card">Phase <b id="phase">—</b></div><div class="card">Confidence <b id="confidence">—</b></div></div>
+<canvas id="scope" width="1024" height="180"></canvas>
+<audio-state id="audio-state" domain="audio" status="idle"><waveform id="waveform"></waveform><spectrum id="spectrum"></spectrum><json-snapshot id="json"></json-snapshot></audio-state>
+<script>
+const $=id=>document.getElementById(id), state=$('audio-state'), sel=$('devices');
+let ctx,src,analyser,raf;
+async function devices(){const ds=await navigator.mediaDevices.enumerateDevices(); sel.innerHTML=''; ds.filter(d=>d.kind==='audioinput').forEach(d=>{const o=document.createElement('option');o.value=d.deviceId;o.textContent=d.label||'audio input';sel.appendChild(o)})}
+async function start(){
+ cancelAnimationFrame(raf); if(ctx) await ctx.close();
+ const stream=await navigator.mediaDevices.getUserMedia({audio:{deviceId:sel.value?{exact:sel.value}:undefined,echoCancellation:false,noiseSuppression:false,autoGainControl:false}});
+ await devices(); ctx=new AudioContext(); src=ctx.createMediaStreamSource(stream); analyser=ctx.createAnalyser(); analyser.fftSize=2048; analyser.smoothingTimeConstant=.72; src.connect(analyser); state.setAttribute('status','live'); tick();
+}
+function tick(){
+ const td=new Float32Array(analyser.fftSize), fd=new Float32Array(analyser.frequencyBinCount); analyser.getFloatTimeDomainData(td); analyser.getFloatFrequencyData(fd);
+ let ss=0,peak=0; for(const x of td){ss+=x*x;peak=Math.max(peak,Math.abs(x))} const rms=Math.sqrt(ss/td.length);
+ let bi=1,bv=-Infinity; for(let i=1;i<fd.length;i++)if(fd[i]>bv){bv=fd[i];bi=i} const hz=bi*ctx.sampleRate/analyser.fftSize;
+ // phase proxy at dominant bin via single-bin quadrature projection
+ let re=0,im=0; const w=2*Math.PI*bi/td.length; for(let n=0;n<td.length;n++){re+=td[n]*Math.cos(w*n);im-=td[n]*Math.sin(w*n)} const phase=Math.atan2(im,re);
+ const confidence=Math.max(0,Math.min(1,(bv+100)/70));
+ const snap={timestamp:performance.timeOrigin+performance.now(),sample_rate:ctx.sampleRate,fft_size:analyser.fftSize,rms,peak,dominant_hz:hz,phase,confidence};
+ Object.entries(snap).forEach(([k,v])=>state.setAttribute(k.replaceAll('_','-'),typeof v==='number'?String(+v.toFixed(6)):String(v)));
+ $('rms').textContent=rms.toFixed(4);$('peak').textContent=peak.toFixed(4);$('hz').textContent=hz.toFixed(2);$('phase').textContent=phase.toFixed(3);$('confidence').textContent=confidence.toFixed(3);
+ // compact residues: 64 waveform + 64 spectrum bins
+ const wave=Array.from({length:64},(_,i)=>+td[Math.floor(i*td.length/64)].toFixed(4));
+ const spec=Array.from({length:64},(_,i)=>+fd[Math.floor(i*fd.length/64)].toFixed(1));
+ $('waveform').textContent=JSON.stringify(wave); $('spectrum').textContent=JSON.stringify(spec); $('json').textContent=JSON.stringify(snap);
+ draw(td); window.__AUDIO_STATE__=snap; window.dispatchEvent(new CustomEvent('audio-state',{detail:snap})); raf=requestAnimationFrame(tick);
+}
+function draw(a){const c=$('scope'),g=c.getContext('2d');g.clearRect(0,0,c.width,c.height);g.beginPath();for(let i=0;i<a.length;i++){const x=i/(a.length-1)*c.width,y=(.5-a[i]*.45)*c.height;i?g.lineTo(x,y):g.moveTo(x,y)}g.strokeStyle='#67e8f9';g.stroke()}
+$('start').onclick=()=>start().catch(e=>{state.setAttribute('status','error');$('json').textContent=e.message});navigator.mediaDevices?.addEventListener('devicechange',devices);devices();
+</script></body></html>
